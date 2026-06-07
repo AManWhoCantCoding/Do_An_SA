@@ -1,0 +1,36 @@
+@page
+@model DocDocGo.Pages.Prescriptions.AddPrescriptionModel
+@{
+    ViewData["Title"] = "Add Prescription";
+    Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container border" style="padding: 20px">
+    <form id="add-prescription-form">
+        <div class="form-floating mb-3">
+            <select id="patientId" class="form-control" required></select>
+            <label>Patient</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input id="medicationName" class="form-control" required />
+            <label>Medication Name</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input id="dosage" class="form-control" required />
+            <label>Dosage</label>
+        </div>
+        <div class="form-check mb-3">
+            <input id="paymentNeeded" class="form-check-input" type="checkbox" />
+            <label class="form-check-label">Payment Needed</label>
+        </div>
+        <div class="form-floating mb-3">
+            <textarea id="notes" class="form-control"></textarea>
+            <label>Notes</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Prescription (API)</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/js/prescriptions.js" asp-append-version="true"></script>
+}

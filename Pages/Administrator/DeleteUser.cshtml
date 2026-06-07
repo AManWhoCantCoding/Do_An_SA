@@ -1,0 +1,16 @@
+﻿@page
+@model DocDocGo.Pages.Administrator.DeleteUserModel
+@{
+    ViewData["Title"] = "Delete User";
+    Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
+
+}
+<h1>Delete User</h1>
+
+<p>Are you sure you want to delete the user?</p>
+
+<form method="post">
+    <input type="hidden" asp-for="ExistingUserModel.Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-page="/Patient/Index" class="btn btn-secondary">Cancel</a>
+</form>

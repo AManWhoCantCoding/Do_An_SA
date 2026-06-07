@@ -1,0 +1,15 @@
+﻿@page
+@model DocDocGo.Pages.Administrator.LockoutUserModel
+@{
+        ViewData["Title"] = "Lockout User";
+            Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Are you sure you want to lockout this user?</p>
+
+<form method="post">
+    <input type="hidden" asp-for="ExistingUserModel.Id" />
+    <button type="submit" class="btn btn-danger">Lockout</button>
+    <a asp-page="/Patient/Index" class="btn btn-secondary">Cancel</a>
+</form>

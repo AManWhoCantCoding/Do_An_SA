@@ -1,0 +1,92 @@
+﻿@page
+@model DocDocGo.Pages.Administrator.SettingsModel
+@{
+    ViewData["Title"] = "Administrator Settings";
+    Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
+
+}
+<h1>@ViewData["Title"]</h1>
+
+<body>
+    <div id="admin-settings">
+        <ul>
+            <li><a asp-action="#general">General User Settings</a></li>
+                    <li><a asp-page="/Administrator/Register">Register a new user</a></li>
+        </ul>
+
+        <div id="general">
+            <h2>User Settings</h2>
+            <form class="d-flex">
+                <input id="searchBox" class="form-control me-sm-2" type="search" placeholder="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
+            </form>
+            <div class="form-group" style="margin-top: 10px;">
+                <table class="table table-hover table-bordered table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Middle Name</th>
+                            <th>Last Name</th>
+                            <th>Email Address</th>
+                            <th>Date of Birth</th>
+                            <th>Contact Number</th>
+                            <th>Gender</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Users != null)
+                        {
+                            @foreach (var user in Model.Users)
+                            {
+                                <tr>
+                                    <td>@(user.FirstName)</td>
+                                    <td>@(user.MiddleName)</td>
+                                    <td>@(user.LastName)</td>
+                                    <td>@(user.UserName)</td>
+                                    <td>@(user.DateOfBirth)</td>
+                                    <td>@(user.PhoneNumber)</td>
+                                    <td>@(user.Gender)</td>
+
+                                    <td>
+                                        <ul class="list-inline">
+                                            <li class="list-inline-item">
+                                                <a asp-page="/Administrator/UpdateUser" asp-route-id="@user.Id" class="btn btn-primary my-2 my-sm-0"
+                                           data-toggle="tooltip" data-placement="top" title="Edit">
+                                                    <i class="bi bi-pencil-square"></i>
+                                                </a>
+                                            </li>
+                                            <li class="list-inline-item">
+
+                                                <a asp-page="/Administrator/LockoutUser" asp-route-id="@user.Id" class="btn btn-danger my-2 my-sm-0"
+                                           data-toggle="tooltip" data-placement="top" title="Lockout User">
+                                                        <i class="bi bi-lock"></i>
+                                                </a>
+                                            </li>
+
+                                            <li class="list-inline-item">
+                                                <a asp-page="/Administrator/DeleteUser" asp-route-id="@user.Id" class="btn btn-danger my-2 my-sm-0"
+                                           data-toggle="tooltip" data-placement="top" title="Delete">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    @section Scripts {
+        <script src="~/js/search.js"></script>@* This is for the searching logic, mainly with jquery.*@
+        <style>
+            .contact-number {
+                white-space: nowrap; /*makes sure line breaks aren't enforced on the column.*/
+            }
+        </style>
+    }
+    </body>

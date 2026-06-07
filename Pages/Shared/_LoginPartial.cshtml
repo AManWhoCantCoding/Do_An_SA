@@ -1,0 +1,34 @@
+﻿@using DocDocGo.Models
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> UserManager
+
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item">
+            <a id="manage" class="nav-link text-dark"> Hello @UserManager.GetUserName(User)!</a>
+        </li>
+        <li class="nav-item">
+            <form id="logoutForm" class="form-inline" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Account/Logout")">
+                <button id="logout" type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="authDropdown" role="button"
+                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Authentication
+                </a>
+                <div class="dropdown-menu" aria-labelledby="authDropdown">
+                    <a class="dropdown-item" asp-page="/Account/Login">Login</a>
+@*                    <a class="dropdown-item" asp-page="/Administrator/Register">Register</a> //You could add this in here, along with revoking the prior need for authorization if you want to allow anyone to register.
+*@                </div>
+            </li>
+    }
+</ul>
+

@@ -1,0 +1,42 @@
+﻿@page
+@model DocDocGo.Pages.Reports.ReportTypesModel
+@{
+        ViewData["Title"] = "Report Types";
+    Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <form class="d-flex">
+            <input id="searchBox" class="form-control me-sm-2" type="search" placeholder="Search">
+            <button class="btn btn-secondary my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
+        </form>
+        <div class="form-group" style="margin-top: 10px;">
+            <table class="table table-hover table-bordered table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                    <th>Report Type ID</th>
+                        <th>Template Description</th>
+                        <th>Created On</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var report in Model.ReportTypes)
+                {
+                    <tr>
+                        <td>@report.ReportTypeId</td>
+                        <td>@report.TemplateType</td>
+                        <td>@report.ReportTypeCreationTime</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/search.js"></script>@* This is for the searching logic.*@
+
+}

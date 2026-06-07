@@ -1,0 +1,55 @@
+﻿﻿@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/siteTheme.css" asp-append-version="true" />
+    <link rel="icon" type="image/png" href="~/resources/main-logo.ico" sizes="32x32">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/DocDocGo.styles.css" asp-append-version="true" />
+
+<div class="row justify-content-center">
+    <div class="col-5 mt-5">
+        <div class="card login-logout-card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Account/Login">
+                            Log In
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-page="/Administrator/Register">
+                            Register
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-center">
+                    <div class="col-10 my-4">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        $(function () {
+            const currentPage = location.pathname;
+            $('.nav-tabs li a').each(function () {
+                const $this = $(this);
+                if (currentPage.toLowerCase().indexOf($this.attr('href').toLowerCase()) !== -1) {
+                    $this.addClass('active');
+                }
+            })
+        })
+    </script>
+}

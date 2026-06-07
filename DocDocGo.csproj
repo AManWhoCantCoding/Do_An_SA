@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>wwwroot\resources\main-logo.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Pages\Account\Pages\**" />
+    <Content Remove="Pages\Account\Pages\**" />
+    <EmbeddedResource Remove="Pages\Account\Pages\**" />
+    <None Remove="Pages\Account\Pages\**" />
+    <Compile Remove="DocDocGo.Tests\**" />
+    <Content Remove="DocDocGo.Tests\**" />
+    <EmbeddedResource Remove="DocDocGo.Tests\**" />
+    <None Remove="DocDocGo.Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\RolesModel.cs" />
+    <Compile Remove="Models\UserRolesModel.cs" />
+    <Compile Remove="Repositories\Interfaces\IPatientRepository.cs" />
+    <Compile Remove="Repositories\Interfaces\IPrescriptionRepository.cs" />
+    <Compile Remove="Repositories\Interfaces\IReportRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Database-Copy\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="6.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.19" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="bootstrap" Version="5.3.0" />
+    <PackageReference Include="ClosedXML" Version="0.102.0" />
+    <PackageReference Include="itext7" Version="8.0.0" />
+    <PackageReference Include="jQuery" Version="3.7.0" />
+    <PackageReference Include="jQuery.Validation" Version="1.19.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.18" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.18" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.19" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.19" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.19">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.19" />
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="4.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
+    <PackageReference Include="SendGrid" Version="9.28.1" />
+  </ItemGroup>
+
+</Project>

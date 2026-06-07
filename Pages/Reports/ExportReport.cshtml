@@ -1,0 +1,30 @@
+﻿@page "{id}"
+@model DocDocGo.Pages.Reports.ExportReportModel
+@{
+    ViewData["Title"] = "Generate Report";
+    Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Please enter the file name to use for exporting :)</p>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="container border" style="padding: 20px">
+    <div class="row">
+        <div class="col-md-6">
+            <form method="post">
+                <div class="form-group">
+                    <label for="fileName">File Name:</label>
+                    <input type="text" id="fileName" name="fileName" class="form-control" />
+                    <span asp-validation-for="fileName" class="text-danger"></span>
+                </div>
+                <div style="margin-bottom: 15px;"></div>
+
+                <button type="submit" asp-page-handler="ExportToExcel" class="btn btn-primary">Export to Excel</button>
+            </form>
+
+        </div>
+    </div>
+</div>

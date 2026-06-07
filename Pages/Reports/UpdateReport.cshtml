@@ -1,0 +1,52 @@
+﻿@page
+@model DocDocGo.Pages.Reports.UpdateReportModel
+@{
+    ViewData["Title"] = "Update Report";
+    Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container border" style="padding: 20px">
+    <form method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <input type="hidden" asp-for="ExistingReportModel.ReportId" />
+        <div class="form-group">
+            <label asp-for="ExistingReportModel.PatientId">Patient ID:</label>
+            <select asp-for="ExistingReportModel.PatientId" class="form-control">
+                <option value="">-- Select Patient --</option>
+                @if (Model.Patients != null)
+                {
+                    @foreach (var patient in Model.Patients)
+                    {
+                        <option value="@patient.PatientId">@($"{patient.FirstName} {patient.LastName}")</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="ExistingReportModel.PatientId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ExistingReportModel.ReportDescription">Report Description:</label>
+            <input asp-for="ExistingReportModel.ReportDescription" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="ExistingReportModel.InitialStaffName">Initial Staff Name:</label>
+            <input asp-for="ExistingReportModel.InitialStaffName" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ExistingReportModel.Status">Status:</label>
+            <select asp-for="ExistingReportModel.Status" class="form-control">
+                <option value="100 - Created">100 - Created</option>
+                <option value="200 - Checking">200 - Checking</option>
+                <option value="300 - In Progress">300 - In Progress</option>
+                <option value="400 - Completed">400 - Completed</option>
+                <option value="500 - Rejected">500 - Rejected</option>
+            </select>
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+            <button type="submit" class="btn btn-primary">Update Report</button>
+        </div>
+
+    </form>
+</div>

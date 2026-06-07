@@ -1,0 +1,43 @@
+﻿@page
+@model DocDocGo.Pages.Reports.ReportsModel
+@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <form class="d-flex" onsubmit="return false;">
+                <input id="searchBox" class="form-control me-sm-2" type="search" placeholder="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="button"><i class="bi bi-search"></i></button>
+            </form>
+            <div class="form-group" style="margin-top: 10px;">
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Report ID</th>
+                            <th>Patient ID</th>
+                            <th>Created On</th>
+                            <th>Report Description</th>
+                            <th>Report Type</th>
+                            <th>Has Report Been Printed?</th>
+                            <th>Report Status</th>
+                            <th>Report Started By Staff member</th>
+                            <th>Last Updated</th>
+                            <th>Last Updated By</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reports-table-body">
+                        <tr><td colspan="11" class="text-center">Loading reports via API...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/reports.js" asp-append-version="true"></script>
+}

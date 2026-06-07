@@ -1,0 +1,68 @@
+﻿@page
+@model DocDocGo.Pages.Reports.ReportGeneratorModel
+@{
+    ViewData["Title"] = "Generate Report";
+    Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="container">
+        <div asp-validation-summary="All" class="text-danger"></div>
+       <div class="form-group">
+    <label asp-for="NewReportModel.ReportTypeId">Report Type:</label>
+    <select asp-for="NewReportModel.ReportTypeId" class="form-control">
+        <option value="">-- Select a Template Type --</option>
+        @if (Model.ReportTypes != null)
+        {
+            @foreach (var reportType in Model.ReportTypes)
+            {
+                <option value="@reportType.ReportTypeId">@reportType.TemplateType</option>
+            }
+        }
+    </select>
+</div>
+    <form method="post">
+
+        <div class="form-group">
+            <label asp-for="NewReportModel.PatientId">Patient ID:</label>
+            <select asp-for="NewReportModel.PatientId" class="form-control">
+                <option value="">-- Select Patient --</option>
+                @if (Model.Patients != null)
+                {
+                    @foreach (var patient in Model.Patients)
+                    {
+                        <option value="@patient.PatientId">@($"{patient.FirstName} {patient.LastName}")</option>
+                    }
+                }
+            </select>
+            <span asp-validation-for="NewReportModel.PatientId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NewReportModel.ReportDescription">Report Description:</label>
+            <input asp-for="NewReportModel.ReportDescription" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="NewReportModel.InitialStaffName">Initial Staff Name:</label>
+            <input asp-for="NewReportModel.InitialStaffName" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NewReportModel.Status">Status:</label>
+            <select asp-for="NewReportModel.Status" class="form-control">
+                <option value="100 - Created">100 - Created</option>
+                <option value="200 - Checking">200 - Checking</option>
+                <option value="300 - In Progress">300 - In Progress</option>
+                <option value="400 - Completed">400 - Completed</option>
+                <option value="500 - Rejected">500 - Rejected</option>
+            </select>
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+            <button type="submit" asp-page-handler="CreateReport" class="btn btn-primary">Generate Report</button>
+            <button type="submit" disabled="true" asp-page-handler="CreateTemplateType" class="btn btn-secondary">Save As Template</button>
+        </div>
+
+    </form>
+</div>

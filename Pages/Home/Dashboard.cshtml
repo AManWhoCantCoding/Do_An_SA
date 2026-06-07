@@ -1,0 +1,13 @@
+﻿
+@page
+@model DocDocGo.Pages.Home.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/pages/shared/_DashboardLayout.cshtml";
+}
+@inject UserManager<UserModel> UserManager
+@using DocDocGo.Models
+@using Microsoft.AspNetCore.Identity
+
+<h1> Welcome to the DocDocGo application</h1>
+<p>Select one of the menu items to get started.</p>

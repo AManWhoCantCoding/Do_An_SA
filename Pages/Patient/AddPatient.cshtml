@@ -1,0 +1,64 @@
+﻿@page
+@model DocDocGo.Pages.Patient.AddPatientModel
+@{
+    ViewData["Title"] = "Add Patient";
+    Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
+}
+
+<div class="container border" style="padding: 20px">
+    <section>
+        <form id="add-patient-form">
+            <div id="form-errors" class="text-danger"></div>
+            <div class="form-floating">
+                <input id="firstName" class="form-control" required />
+                <label class="form-label">First name</label>
+            </div>
+            <div style="margin-bottom: 10px;"></div>
+            <div class="form-floating">
+                <input id="lastName" class="form-control" required />
+                <label class="form-label">Last name</label>
+            </div>
+            <div style="margin-bottom: 10px;"></div>
+            <div class="form-floating">
+                <input id="emailAddress" class="form-control" type="email" />
+                <label class="form-label">Email Address</label>
+            </div>
+            <div style="margin-bottom: 10px;"></div>
+            <div class="form-floating">
+                <input id="contactNumber" class="form-control" />
+                <label class="form-label">Phone Number</label>
+            </div>
+            <div style="margin-bottom: 10px;"></div>
+            <div class="form-floating">
+                <select id="gender" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Non-Binary">Non-Binary</option>
+                    <option value="Prefer not to say">Prefer not to say</option>
+                    <option value="Custom">Custom</option>
+                </select>
+                <label class="form-label">Select gender</label>
+            </div>
+            <div style="margin-bottom: 10px;"></div>
+            <div class="form-floating">
+                <input id="dateOfBirth" type="date" class="form-control" />
+                <label class="form-label">Date of Birth</label>
+            </div>
+            <div style="margin-bottom: 15px;"></div>
+            <div class="form-check">
+                <input id="isPrivatePatient" class="form-check-input" type="checkbox" />
+                <label class="form-check-label">Is not using state healthcare options?</label>
+            </div>
+            <div style="margin-bottom: 15px;"></div>
+            <div class="form-group d-flex align-items-center">
+                <div class="col-7 offset-2 text-center">
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">Add Patient (API)</button>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>
+
+@section Scripts {
+    <script src="~/js/patients.js" asp-append-version="true"></script>
+}

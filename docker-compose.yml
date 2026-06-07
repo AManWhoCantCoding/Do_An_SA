@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "DocDocGo@2026!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+
+  docdocgo:
+    build: .
+    ports:
+      - "8080:80"
+    environment:
+      ConnectionStrings__HospitalManagementSQLConnection: "Server=sqlserver;Database=DocDocGoDB;User Id=sa;Password=DocDocGo@2026!;TrustServerCertificate=True"
+      ASPNETCORE_ENVIRONMENT: Development
+    depends_on:
+      - sqlserver
+
+volumes:
+  sqldata:
