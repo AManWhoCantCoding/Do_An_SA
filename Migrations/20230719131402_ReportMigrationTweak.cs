@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace DocDocGo.Migrations
+namespace MediSphere.Migrations
 {
     public partial class ReportMigrationTweak : Migration
     {

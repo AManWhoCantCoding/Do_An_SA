@@ -1,13 +1,51 @@
-﻿
+
 @page
-@model DocDocGo.Pages.Home.DashboardModel
+@model MediSphere.Pages.Home.DashboardModel
 @{
     ViewData["Title"] = "Dashboard";
-    Layout = "~/pages/shared/_DashboardLayout.cshtml";
+    Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
 }
-@inject UserManager<UserModel> UserManager
-@using DocDocGo.Models
-@using Microsoft.AspNetCore.Identity
 
-<h1> Welcome to the DocDocGo application</h1>
-<p>Select one of the menu items to get started.</p>
+<div class="ms-page-header">
+    <h1>Welcome to MediSphere</h1>
+    <p>Select one of the menu items to get started.</p>
+</div>
+
+<div class="ms-stat-grid">
+    <a class="ms-stat-card" asp-page="/Patient/Index">
+        <div class="ms-stat-icon teal"><i class="bi bi-person"></i></div>
+        <div>
+            <div class="ms-stat-label">Module</div>
+            <div class="ms-stat-title">Patients</div>
+        </div>
+    </a>
+    <a class="ms-stat-card" asp-page="/Appointments/Index">
+        <div class="ms-stat-icon indigo"><i class="bi bi-calendar-event"></i></div>
+        <div>
+            <div class="ms-stat-label">Module</div>
+            <div class="ms-stat-title">Appointments</div>
+        </div>
+    </a>
+    <a class="ms-stat-card" asp-page="/Prescriptions/Index">
+        <div class="ms-stat-icon amber"><i class="bi bi-capsule"></i></div>
+        <div>
+            <div class="ms-stat-label">Module</div>
+            <div class="ms-stat-title">Prescriptions</div>
+        </div>
+    </a>
+    <a class="ms-stat-card" asp-page="/Reports/Index">
+        <div class="ms-stat-icon rose"><i class="bi bi-file-earmark-medical"></i></div>
+        <div>
+            <div class="ms-stat-label">Module</div>
+            <div class="ms-stat-title">Reports</div>
+        </div>
+    </a>
+</div>
+
+<div class="ms-card">
+    <h3 style="font-size:1rem;font-weight:600;margin-bottom:8px;">Quick start</h3>
+    <p class="text-muted mb-0" style="font-size:0.92rem;">
+        Use the sidebar to navigate between Patients, Appointments, Prescriptions, and Reports.
+        Administrator Settings is available for users with the Administrator role.
+    </p>
+</div>

@@ -1,7 +1,7 @@
 /**
- * DocDocGo API client — web UI calls REST API using the login cookie session.
+ * MediSphere API client — web UI calls REST API using the login cookie session.
  */
-const DocDocGoApi = (function () {
+const MediSphereApi = (function () {
     const baseUrl = '/api';
 
     async function request(method, path, body) {

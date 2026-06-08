@@ -1,13 +1,17 @@
-﻿@page
-@model DocDocGo.Pages.Patient.UpdatePatientModel
+@page
+@model MediSphere.Pages.Patient.UpdatePatientModel
 @{
     ViewData["Title"] = "Edit Patient";
     Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
 }
 
-<div class="container border" style="padding: 20px">
-    <section>
-        <form id="update-patient-form">
+<div class="ms-page-header">
+    <h2>Edit Patient</h2>
+    <p>Update patient information.</p>
+</div>
+
+<div class="ms-card ms-form-card">
+    <form id="update-patient-form">
             <input type="hidden" id="patientId" value="@Model.PatientId" />
             <div class="form-floating">
                 <input id="firstName" class="form-control" required />
@@ -53,8 +57,7 @@
             <div class="text-center">
                 <button type="submit" class="btn btn-primary btn-lg">Update Patient (API)</button>
             </div>
-        </form>
-    </section>
+    </form>
 </div>
 
 @section Scripts {

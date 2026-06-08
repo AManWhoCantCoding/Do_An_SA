@@ -1,10 +1,10 @@
-using DocDocGo.Models;
+using MediSphere.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using DocDocGo.Repositories.Interfaces;
+using MediSphere.Repositories.Interfaces;
 
-namespace DocDocGo.Pages.Reports
+namespace MediSphere.Pages.Reports
 {
 
     [Authorize]

@@ -1,139 +1,136 @@
-﻿@page
-@model DocDocGo.Pages.Appointments.IndexModel
+@page
+@model MediSphere.Pages.Appointments.IndexModel
 @{
     ViewData["Title"] = "Appointments";
     Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
 }
 
-<section>
-    <div class="container">
-        <div id="calendar"></div>
-    </div>
+<div class="ms-page-header">
+    <h2>Appointments</h2>
+    <p>View and manage the appointment calendar.</p>
+</div>
 
-    <div class="modal fade" id="appointment-add">
-        <div class="modal-dialog">
-            <form id="add-appointment-form">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Add An Appointment (API)</h4>
-                        <button type="button" id="closeBtn" class="close" data-dismiss="modal">&times;</button>
+<div class="ms-card">
+    <div id="calendar"></div>
+</div>
+
+<div class="modal fade" id="appointment-add">
+    <div class="modal-dialog">
+        <form id="add-appointment-form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add An Appointment (API)</h4>
+                    <button type="button" id="closeBtn" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="topic" id="NewAppointment_Topic">
+                        <label>Topic</label>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="topic" id="NewAppointment_Topic">
-                            <label class="form-label">Topic</label>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <label class="control-label">Patient:</label>
-                            <select name="patientId" id="NewAppointment_PatientId" class="form-control">
-                                <option value="">-- Select Patient --</option>
-                            </select>
-                        </div>
-                        <br />
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Start Time:</label>
-                            <div class="col-sm-9">
-                                <input class="form-control datetimepicker" name="startTime" id="NewAppointment_StartTime">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">End Time:</label>
-                            <div class="col-sm-9">
-                                <input class="form-control datetimepicker" name="endTime" id="NewAppointment_EndTime">
-                            </div>
-                        </div>
-                        <br>
-                        <div class="form-floating">
-                            <textarea class="form-control" name="notes" id="NewAppointment_Notes"></textarea>
-                            <label class="form-label">Notes</label>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Status:</label>
-                            <select name="status" id="NewAppointment_Status" class="form-control">
-                                <option value="100 - Scheduled">100 - Scheduled</option>
-                                <option value="200 - Confirmed">200 - Confirmed</option>
-                                <option value="300 - Arrived">300 - Arrived</option>
-                                <option value="400 - In Progress">400 - In Progress</option>
-                                <option value="500 - Completed">500 - Completed</option>
-                                <option value="600 - Rescheduled">600 - Rescheduled</option>
-                                <option value="700 - Canceled">700 - Canceled</option>
-                                <option value="800 - No-show">800 - No-show</option>
-                                <option value="900 - Unscheduled">900 - Unscheduled</option>
-                            </select>
+                    <div class="mb-3">
+                        <label class="form-label">Patient:</label>
+                        <select name="patientId" id="NewAppointment_PatientId" class="form-control">
+                            <option value="">-- Select Patient --</option>
+                        </select>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Start Time:</label>
+                        <div class="col-sm-9">
+                            <input class="form-control datetimepicker" name="startTime" id="NewAppointment_StartTime">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" id="maincloseBtn" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Add Appointment</button>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">End Time:</label>
+                        <div class="col-sm-9">
+                            <input class="form-control datetimepicker" name="endTime" id="NewAppointment_EndTime">
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" name="notes" id="NewAppointment_Notes"></textarea>
+                        <label>Notes</label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status:</label>
+                        <select name="status" id="NewAppointment_Status" class="form-control">
+                            <option value="100 - Scheduled">100 - Scheduled</option>
+                            <option value="200 - Confirmed">200 - Confirmed</option>
+                            <option value="300 - Arrived">300 - Arrived</option>
+                            <option value="400 - In Progress">400 - In Progress</option>
+                            <option value="500 - Completed">500 - Completed</option>
+                            <option value="600 - Rescheduled">600 - Rescheduled</option>
+                            <option value="700 - Canceled">700 - Canceled</option>
+                            <option value="800 - No-show">800 - No-show</option>
+                            <option value="900 - Unscheduled">900 - Unscheduled</option>
+                        </select>
                     </div>
                 </div>
-            </form>
-        </div>
+                <div class="modal-footer">
+                    <button type="button" id="maincloseBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Add Appointment</button>
+                </div>
+            </div>
+        </form>
     </div>
+</div>
 
-    <div class="modal fade" id="appointment-edit">
-        <div class="modal-dialog">
-            <form id="edit-appointment-form">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Edit Appointment (API)</h4>
-                        <button type="button" id="closeSelectedBtn" class="close" data-dismiss="modal">&times;</button>
+<div class="modal fade" id="appointment-edit">
+    <div class="modal-dialog">
+        <form id="edit-appointment-form">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Appointment (API)</h4>
+                    <button type="button" id="closeSelectedBtn" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="topic" id="SelectedAppointment_Topic">
+                        <label>Topic</label>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="topic" id="SelectedAppointment_Topic">
-                            <label class="form-label">Topic</label>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <label class="control-label">Patient:</label>
-                            <select name="patientId" id="SelectedAppointment_PatientId" class="form-control"></select>
-                        </div>
-                        <br />
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">Start Time:</label>
-                            <div class="col-sm-9">
-                                <input class="form-control datetimepicker" name="startTime" id="SelectedAppointment_StartTime">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-3 col-form-label">End Time:</label>
-                            <div class="col-sm-9">
-                                <input class="form-control datetimepicker" name="endTime" id="SelectedAppointment_EndTime">
-                            </div>
-                        </div>
-                        <br>
-                        <div class="form-floating">
-                            <textarea class="form-control" name="notes" id="SelectedAppointment_Notes"></textarea>
-                            <label class="form-label">Notes</label>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Status:</label>
-                            <select name="status" id="SelectedAppointment_Status" class="form-control">
-                                <option value="100 - Scheduled">100 - Scheduled</option>
-                                <option value="200 - Confirmed">200 - Confirmed</option>
-                                <option value="300 - Arrived">300 - Arrived</option>
-                                <option value="400 - In Progress">400 - In Progress</option>
-                                <option value="500 - Completed">500 - Completed</option>
-                                <option value="600 - Rescheduled">600 - Rescheduled</option>
-                                <option value="700 - Canceled">700 - Canceled</option>
-                                <option value="800 - No-show">800 - No-show</option>
-                                <option value="900 - Unscheduled">900 - Unscheduled</option>
-                            </select>
+                    <div class="mb-3">
+                        <label class="form-label">Patient:</label>
+                        <select name="patientId" id="SelectedAppointment_PatientId" class="form-control"></select>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Start Time:</label>
+                        <div class="col-sm-9">
+                            <input class="form-control datetimepicker" name="startTime" id="SelectedAppointment_StartTime">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" id="maincloseSelectedBtn" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-success">Update Appointment</button>
-                        <button type="button" id="delete-appointment-btn" class="btn btn-danger">Delete Appointment</button>
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">End Time:</label>
+                        <div class="col-sm-9">
+                            <input class="form-control datetimepicker" name="endTime" id="SelectedAppointment_EndTime">
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" name="notes" id="SelectedAppointment_Notes"></textarea>
+                        <label>Notes</label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status:</label>
+                        <select name="status" id="SelectedAppointment_Status" class="form-control">
+                            <option value="100 - Scheduled">100 - Scheduled</option>
+                            <option value="200 - Confirmed">200 - Confirmed</option>
+                            <option value="300 - Arrived">300 - Arrived</option>
+                            <option value="400 - In Progress">400 - In Progress</option>
+                            <option value="500 - Completed">500 - Completed</option>
+                            <option value="600 - Rescheduled">600 - Rescheduled</option>
+                            <option value="700 - Canceled">700 - Canceled</option>
+                            <option value="800 - No-show">800 - No-show</option>
+                            <option value="900 - Unscheduled">900 - Unscheduled</option>
+                        </select>
                     </div>
                 </div>
-                <input type="hidden" id="SelectedAppointmentId" />
-            </form>
-        </div>
+                <div class="modal-footer">
+                    <button type="button" id="maincloseSelectedBtn" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-success">Update Appointment</button>
+                    <button type="button" id="delete-appointment-btn" class="btn btn-danger">Delete Appointment</button>
+                </div>
+            </div>
+            <input type="hidden" id="SelectedAppointmentId" />
+        </form>
     </div>
-</section>
+</div>
 
 @section Scripts {
     <script src="~/js/appointments.js" asp-append-version="true"></script>

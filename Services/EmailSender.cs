@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Mail;
 
-namespace DocDocGo.Services
+namespace MediSphere.Services
 {
     /// <summary>
     /// You could implement this with your own values to test the email service :)

@@ -1,18 +1,20 @@
 html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-html {
   position: relative;
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+.contact-number {
+  white-space: nowrap;
+}
+
+.ms-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  z-index: 1035;
+}
+
+.ms-overlay.show {
+  display: block;
 }

@@ -1,72 +1,68 @@
-﻿@using DocDocGo.Models
+@using MediSphere.Models
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<UserModel> SignInManager
 
-<nav class="sidebar">
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link" asp-page="/Patient/Index">
-                <i class="bi bi-person me-2"></i>
-                Patients
-            </a>
-            <ul class="submenu">
-                <li class="nav-item">
-                    <a class="nav-link" asp-page="/Patient/AddPatient">
-                        <i class="bi bi-person-plus me-2"></i>
-                        Add A Patient
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" asp-page="/Appointments/Index">
-                <i class="bi bi-calendar me-2"></i>
-                Appointments
+<nav class="ms-sidebar-nav">
+    <a class="ms-nav-link" data-page href="/Home/Dashboard">
+        <i class="bi bi-grid-1x2"></i>
+        Dashboard
+    </a>
+
+    <a class="ms-nav-link" data-page href="/Patient">
+        <i class="bi bi-person"></i>
+        Patients
+    </a>
+    <ul class="ms-nav-sub">
+        <li>
+            <a class="ms-nav-link" data-page href="/Patient/AddPatient">
+                <i class="bi bi-person-plus"></i>
+                Add A Patient
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" asp-page="/Prescriptions/Index">
-                <i class="bi bi-capsule me-2"></i>
-                Prescriptions
-            </a>
-            <ul class="submenu">
-                <li class="nav-item">
-                    <a class="nav-link" asp-page="/Prescriptions/AddPrescription">
-                        <i class="bi bi-plus-circle me-2"></i>
-                        Add Prescription
-                    </a>
-                </li>
-            </ul>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" asp-page="/Reports/Index">
-                <i class="bi bi-file-text me-2"></i>
-                Reports
-            </a>
-            <ul class="submenu">
-                <li class="nav-item">
-                    <a class="nav-link" asp-page="/Reports/ReportTypes">
-                       <i class="bi bi-file-earmark-medical"></i> Report Types
-                    </a>
-                </li>
-            </ul>
-            <ul class="submenu">
-                <li class="nav-item">
-                    <a class="nav-link" asp-page="/Reports/ReportGenerator">
-                        <i class="bi bi-file-earmark-pdf me-2"></i>
-                        Generate A Report
-                    </a>
-                </li>
-            </ul>
-        </li>
-        @if (User.IsInRole("Administrator"))
-        {
-            <li class="nav-item">
-                <a class="nav-link" asp-page="/Administrator/Settings">
-                    <i class="bi bi-gear me-2"></i>
-                    Administrator Settings
-                </a>
-            </li>
-        }
     </ul>
+
+    <a class="ms-nav-link" data-page href="/Appointments">
+        <i class="bi bi-calendar-event"></i>
+        Appointments
+    </a>
+
+    <a class="ms-nav-link" data-page href="/Prescriptions">
+        <i class="bi bi-capsule"></i>
+        Prescriptions
+    </a>
+    <ul class="ms-nav-sub">
+        <li>
+            <a class="ms-nav-link" data-page href="/Prescriptions/AddPrescription">
+                <i class="bi bi-plus-circle"></i>
+                Add Prescription
+            </a>
+        </li>
+    </ul>
+
+    <a class="ms-nav-link" data-page href="/Reports">
+        <i class="bi bi-file-earmark-medical"></i>
+        Reports
+    </a>
+    <ul class="ms-nav-sub">
+        <li>
+            <a class="ms-nav-link" data-page href="/Reports/ReportTypes">
+                <i class="bi bi-tags"></i>
+                Report Types
+            </a>
+        </li>
+        <li>
+            <a class="ms-nav-link" data-page href="/Reports/ReportGenerator">
+                <i class="bi bi-file-earmark-plus"></i>
+                Generate A Report
+            </a>
+        </li>
+    </ul>
+
+    @if (User.IsInRole("Administrator"))
+    {
+        <a class="ms-nav-link" data-page href="/Administrator/Settings">
+            <i class="bi bi-gear"></i>
+            Administrator Settings
+        </a>
+    }
 </nav>

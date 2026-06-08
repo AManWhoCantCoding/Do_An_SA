@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -12,10 +12,10 @@
     <Content Remove="Pages\Account\Pages\**" />
     <EmbeddedResource Remove="Pages\Account\Pages\**" />
     <None Remove="Pages\Account\Pages\**" />
-    <Compile Remove="DocDocGo.Tests\**" />
-    <Content Remove="DocDocGo.Tests\**" />
-    <EmbeddedResource Remove="DocDocGo.Tests\**" />
-    <None Remove="DocDocGo.Tests\**" />
+    <Compile Remove="MediSphere.Tests\**" />
+    <Content Remove="MediSphere.Tests\**" />
+    <EmbeddedResource Remove="MediSphere.Tests\**" />
+    <None Remove="MediSphere.Tests\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,7 +39,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="bootstrap" Version="5.3.0" />
     <PackageReference Include="ClosedXML" Version="0.102.0" />
-    <PackageReference Include="itext7" Version="8.0.0" />
     <PackageReference Include="jQuery" Version="3.7.0" />
     <PackageReference Include="jQuery.Validation" Version="1.19.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.18" />

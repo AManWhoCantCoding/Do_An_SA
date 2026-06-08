@@ -1,4 +1,4 @@
-using DocDocGo.Models;
+using MediSphere.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace DocDocGo.Pages.Administrator
+namespace MediSphere.Pages.Administrator
 {
     [Authorize(Roles = "Administrator")]
     public class UpdateUserModel : PageModel

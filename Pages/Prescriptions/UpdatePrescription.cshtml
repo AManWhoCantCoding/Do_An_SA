@@ -1,11 +1,16 @@
 @page
-@model DocDocGo.Pages.Prescriptions.UpdatePrescriptionModel
+@model MediSphere.Pages.Prescriptions.UpdatePrescriptionModel
 @{
     ViewData["Title"] = "Update Prescription";
     Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
 }
 
-<div class="container border" style="padding: 20px">
+<div class="ms-page-header">
+    <h2>Update Prescription</h2>
+    <p>Edit prescription details.</p>
+</div>
+
+<div class="ms-card ms-form-card">
     <form id="update-prescription-form">
         <input type="hidden" id="prescriptionId" value="@Model.PrescriptionId" />
         <div class="form-floating mb-3">

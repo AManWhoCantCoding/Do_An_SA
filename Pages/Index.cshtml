@@ -1,21 +1,16 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="container">
-<div class="text-center">
-    <h1 class="display-4">DocDocGo - Hospital Management System</h1>
-
-    <p> A Hospital Management System (HMS) built with the future of your clinic / hospital in mind.</p>
-    
-    <p>Please login to the system using the authentication dropdown to get started.</p>
-
-    <div class="col-md-8 mx-auto">
-        <img src="~/resources/national-cancer-institute-template-image.jpg" alt="doctor-patient" style="width: 100%;" />
+<div class="ms-hero">
+    <h1>MediSphere — Hospital Management System</h1>
+    <p>A modern hospital management platform built with your clinic's future in mind. Streamline patients, appointments, prescriptions, and reports in one place.</p>
+    <a asp-page="/Account/Login" class="btn btn-primary btn-lg px-4">
+        <i class="bi bi-box-arrow-in-right me-2"></i>Sign in to get started
+    </a>
+    <div class="ms-hero-image mt-5">
+        <img src="~/resources/national-cancer-institute-template-image.jpg" alt="Healthcare professionals">
     </div>
-          
 </div>
-</div>
-

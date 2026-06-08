@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace DocDocGo.Models
+namespace MediSphere.Models
 {
     /// <summary>
     /// represents a user table with custom fields for use with asp.net core scaffolded identity.

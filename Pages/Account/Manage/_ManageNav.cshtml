@@ -1,4 +1,4 @@
-﻿@using DocDocGo.Models;
+@using MediSphere.Models;
 @inject SignInManager<UserModel> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();

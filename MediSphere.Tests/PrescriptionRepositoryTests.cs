@@ -1,10 +1,10 @@
-using DocDocGo.DAL;
-using DocDocGo.Models;
-using DocDocGo.Repositories;
+using MediSphere.DAL;
+using MediSphere.Models;
+using MediSphere.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace DocDocGo.Tests
+namespace MediSphere.Tests
 {
     public class PrescriptionRepositoryTests
     {

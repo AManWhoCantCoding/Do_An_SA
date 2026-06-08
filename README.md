@@ -1,23 +1,24 @@
-<h1 align="center">DocDocGo</h1>
+<h1 align="center">MediSphere</h1>
 <a id="top"></a>
 
-<!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <img src="wwwroot/resources/logo-two.png" alt="DocDocGo Logo">
+  <img src="wwwroot/resources/logo-two.png" alt="MediSphere Logo">
 </div>
 
-DocDocGo is a Hospital Management System — a web-based application designed to streamline and automate the administrative and operational processes of a hospital or medical facility. The system improves efficiency, supports patient care workflows, and provides a user-friendly interface for staff and administrators.
+MediSphere is a Hospital Management System — a modern web application for hospital administration, patient care workflows, and staff management. Previously developed as **DocDocGo**, the project has been rebranded and fully redesigned with a clean, professional UI.
 
-**Vietnamese project documentation:** [TAI_LIEU_DU_AN_DocDocGo.txt](TAI_LIEU_DU_AN_DocDocGo.txt)
+**Vietnamese project documentation:** [TAI_LIEU_DU_AN_MediSphere.txt](TAI_LIEU_DU_AN_MediSphere.txt)
 
 <details>
   <summary>Table of Contents</summary>
   <ol>
     <li><a href="#introduction">Introduction</a></li>
     <li><a href="#features">Features</a></li>
+    <li><a href="#ui-design">UI Design</a></li>
     <li><a href="#software-architecture">Software Architecture</a></li>
     <li><a href="#technologies-used">Tech Stack</a></li>
+    <li><a href="#unused-files">Unused / Redundant Files</a></li>
     <li><a href="#installation">Installation</a></li>
     <li><a href="#api-usage">API Usage</a></li>
     <li><a href="#docker">Docker</a></li>
@@ -29,11 +30,9 @@ DocDocGo is a Hospital Management System — a web-based application designed to
 
 ## Introduction
 
-DocDocGo was developed as a university assignment to demonstrate software engineering practices and the Software Development Life Cycle (SDLC).
+MediSphere was developed as a university assignment to demonstrate software engineering practices and the Software Development Life Cycle (SDLC).
 
-The system offers a comprehensive range of features to manage patient records, appointments, prescriptions, medical staff, and other essential aspects of hospital operations.
-
-Notable additions include **ASP.NET Core Identity** for web authentication and **JWT Bearer authentication** for the REST API, with role-based authorization for Administrator and Staff users.
+The system manages patient records, appointments, prescriptions, medical staff, and reports — via a redesigned Razor Pages UI and a REST API with JWT authentication.
 
 ## Features
 
@@ -68,86 +67,96 @@ Notable additions include **ASP.NET Core Identity** for web authentication and *
 - Full REST API with JWT authentication under `/api/*`.
 - Swagger documentation at `/api/docs` (Development mode).
 - Health checks at `/health` and `/health/ready`.
-- Web UI modules (Patients, Appointments, Prescriptions, Reports) call the API via `api-client.js`.
+- Web UI modules call the API via `api-client.js` (`MediSphereApi`).
+
+## UI Design
+
+The interface was rebuilt from scratch (replacing the Bootswatch *Morph* neumorphic theme):
+
+| Aspect | New design |
+|---|---|
+| Layout | Fixed dark sidebar + sticky top bar |
+| Typography | Plus Jakarta Sans |
+| Colors | Teal/slate medical palette |
+| Components | Card-based pages, modern tables, stat cards on Dashboard |
+| Auth | Centered card with tab navigation |
+
+**Widget names preserved:** Patients, Add A Patient, Appointments, Prescriptions, Add Prescription, Reports, Report Types, Generate A Report, Administrator Settings, Dashboard.
 
 ## Software Architecture
 
-This project includes a complete Software Architecture report meeting SA requirements:
-
-- **Report:** [docs/SA_REPORT.md](docs/SA_REPORT.md) — export to PDF for submission
+- **Report:** [docs/SA_REPORT.md](docs/SA_REPORT.md)
 - **Architecture:** Layered (N-tier) monolith + REST API
-- **Patterns:** Repository pattern, DTOs for API, dual auth (Cookie + JWT)
-- **DevOps:** GitHub Actions CI/CD, Docker, docker-compose, optional Azure deploy workflow
-- **Quality:** Unit tests (xUnit), Serilog logging, health checks, request logging middleware
+- **Patterns:** Repository pattern, DTOs, dual auth (Cookie + JWT)
+- **DevOps:** GitHub Actions CI/CD, Docker, docker-compose
+- **Quality:** Unit tests (xUnit), Serilog, health checks
 
 ## Technologies Used
 
 | Layer | Technologies |
 |---|---|
-| Frontend | HTML, CSS, JavaScript, jQuery, Razor Pages, Bootstrap, FullCalendar |
+| Frontend | HTML, CSS, JavaScript, jQuery, Razor Pages, Bootstrap 5, FullCalendar |
 | Backend | ASP.NET Core 6.0, Web API, ASP.NET Core Identity |
 | API | JWT Bearer, Swagger/OpenAPI, DTOs |
 | Database | SQL Server, Entity Framework Core |
 | DevOps | GitHub Actions, Docker, Serilog, Health Checks, xUnit |
-| Libraries | ClosedXML, SendGrid, iText7 |
+| Libraries | ClosedXML, SendGrid |
+
+## Unused / Redundant Files
+
+These items are **not used** by the running application:
+
+| Item | Reason |
+|---|---|
+| `Models/RolesModel.cs` | Excluded in `.csproj`; file does not exist (Identity roles used instead) |
+| `Models/UserRolesModel.cs` | Excluded in `.csproj`; file does not exist |
+| `Repositories/Interfaces/IPatientRepository.cs` | Excluded in `.csproj`; file does not exist (`IRepository<T>` used) |
+| `Repositories/Interfaces/IPrescriptionRepository.cs` | Excluded in `.csproj`; file does not exist |
+| `Repositories/Interfaces/IReportRepository.cs` | Excluded in `.csproj`; file does not exist |
+| `Pages/Account/Pages/**` | Excluded in `.csproj`; scaffold folder never created |
+| `itext7` NuGet package | Removed — no PDF generation code in the project |
+| Old `siteTheme.css` (Bootswatch Morph, ~334 KB) | Replaced by custom MediSphere theme (~15 KB) |
+
+> **Note:** `Compile Remove` entries in `MediSphere.csproj` can be deleted safely — they reference files that no longer exist on disk.
 
 ## Installation
 
 1. Clone this repository:
 
 ```sh
-git clone https://github.com/Wraami/DocDocGo.git
-cd DocDocGo
+git clone https://github.com/Wraami/MediSphere.git
+cd MediSphere
 ```
 
-2. Restore dependencies and build:
+2. Restore and build:
 
 ```sh
-dotnet restore
-dotnet build
+dotnet restore MediSphere.sln
+dotnet build MediSphere.sln
 ```
 
 3. Set up the database (see below).
 
 ### Restore the Database
 
-Set up SQL Server using SQL Server Management Studio (SSMS).
+Connect to `(localdb)\MSSQLLocalDB` or your SQL Server instance in SSMS.
 
-Connect to `(localdb)\MSSQLLocalDB` or your local SQL Server instance.
+Restore `Database-Copy/DocDocGoDB.bak` (original backup filename). On restore, set the database name to **MediSphereDB**, or keep **DocDocGoDB** and update `HospitalManagementSQLConnection` in `appsettings.json`.
 
 ![SSMS Starting Screenshot](Instruction-images/startingConnection.png)
-
-In Object Explorer, right-click **Databases** → **Restore Database...**
-
 ![SSMS Context Menu Screenshot](Instruction-images/restoreDatabase.png)
-
-Choose **Device** as the source, click **...**, then **Add** and browse to `Database-Copy/DocDocGoDB.bak`.
-
 ![SSMS Selection Screenshot](Instruction-images/restoreDatabaseSelection.png)
-
-Click **OK**, then confirm the restore dialog:
-
 ![SSMS Final Dialog Screenshot](Instruction-images/finalDatabaseRestore.png)
-
-After restore completes, refresh Object Explorer and verify **DocDocGoDB** appears.
-
-If you renamed the database during restore, update `HospitalManagementSQLConnection` in `appsettings.json`.
-
-**Troubleshooting:** If restore fails because the database already exists, take it offline first (Tasks → Take Offline) and drop active connections.
 
 ### Run Locally
 
 ```sh
-dotnet run
+dotnet run --project MediSphere.csproj
 ```
 
-Default URLs (see `Properties/launchSettings.json`):
-- HTTPS: https://localhost:7170
-- HTTP: http://localhost:5144
+Default URLs: https://localhost:7170 · http://localhost:5144
 
 ## API Usage
-
-1. Obtain a JWT token:
 
 ```http
 POST /api/auth/login
@@ -156,18 +165,14 @@ Content-Type: application/json
 { "email": "pavel.sanjah-staff@hospitaltrust.com", "password": "Password123-_" }
 ```
 
-2. Use the token in subsequent requests:
-
 ```http
 GET /api/patients
 Authorization: Bearer <your-token>
 ```
 
-3. Open Swagger UI at `/api/docs` when running in Development.
+Swagger UI: `/api/docs` (Development)
 
-### API Endpoints (summary)
-
-| Resource | Base route |
+| Resource | Route |
 |---|---|
 | Auth | `/api/auth` |
 | Patients | `/api/patients` |
@@ -182,19 +187,15 @@ docker-compose up --build
 ```
 
 - Application: http://localhost:8080
-- SQL Server: localhost:1433 (SA password configured in `docker-compose.yml`)
+- SQL Server: localhost:1433
 
 ## Running Tests
 
 ```sh
-dotnet test
+dotnet test MediSphere.sln
 ```
 
-Test project: `DocDocGo.Tests` (repository unit tests).
-
 ## Usage
-
-Start the project in Visual Studio or with `dotnet run`, then open https://localhost:7170 in your browser.
 
 ### Administrator
 
@@ -212,6 +213,6 @@ Password: Password123-_
 
 ## License
 
-DocDocGo is open-source software licensed under the [MIT License](LICENSE).
+MediSphere is open-source software licensed under the [MIT License](LICENSE).
 
 <p align="right">(<a href="#top">back to top</a>)</p>

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DocDocGo.Pages.Reports
+namespace MediSphere.Pages.Reports
 {
     [Authorize]
     public class ReportsModel : PageModel

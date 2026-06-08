@@ -1,12 +1,12 @@
-using DocDocGo.Models;
+using MediSphere.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using DocDocGo.Services;
+using MediSphere.Services;
 using Microsoft.AspNetCore.Authorization;
 
-namespace DocDocGo.Pages.Administrator
+namespace MediSphere.Pages.Administrator
 {
     [Authorize(Roles = "Administrator")]
     public class DeleteUserModel : PageModel

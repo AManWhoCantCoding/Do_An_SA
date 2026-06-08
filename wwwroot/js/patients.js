@@ -16,7 +16,7 @@ $(document).ready(function () {
     };
 
     try {
-      await DocDocGoApi.patients.create(payload);
+      await MediSphereApi.patients.create(payload);
       window.location.href = '/Patient/Index';
     } catch (err) {
       alert('Failed to add patient: ' + err.message);
@@ -42,7 +42,7 @@ $(document).ready(function () {
     };
 
     try {
-      await DocDocGoApi.patients.update(id, payload);
+      await MediSphereApi.patients.update(id, payload);
       window.location.href = '/Patient/Index';
     } catch (err) {
       alert('Failed to update patient: ' + err.message);
@@ -52,7 +52,7 @@ $(document).ready(function () {
 
 async function loadPatientsTable() {
   try {
-    const patients = await DocDocGoApi.patients.getAll();
+    const patients = await MediSphereApi.patients.getAll();
     const tbody = $('#patients-table-body');
     tbody.empty();
 
@@ -89,7 +89,7 @@ async function loadPatientsTable() {
 
 async function loadPatientForEdit(id) {
   try {
-    const p = await DocDocGoApi.patients.getById(id);
+    const p = await MediSphereApi.patients.getById(id);
     $('#firstName').val(p.firstName);
     $('#lastName').val(p.lastName);
     $('#emailAddress').val(p.emailAddress);

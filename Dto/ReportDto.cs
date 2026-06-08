@@ -1,4 +1,4 @@
-namespace DocDocGo.Dto
+namespace MediSphere.Dto
 {
     public class ReportDto
     {

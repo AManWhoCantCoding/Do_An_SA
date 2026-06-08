@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace DocDocGo.Models
+namespace MediSphere.Models
 {
     public class ReportTypeModel
     {

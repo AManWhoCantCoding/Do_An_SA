@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DocDocGo.csproj" />
+    <ProjectReference Include="..\MediSphere.csproj" />
   </ItemGroup>
 
 </Project>

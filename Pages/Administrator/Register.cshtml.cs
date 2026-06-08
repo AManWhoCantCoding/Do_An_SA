@@ -1,5 +1,5 @@
-using DocDocGo.Models;
-using DocDocGo.ViewModels;
+using MediSphere.Models;
+using MediSphere.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using System.Text.Encodings.Web;
 
-namespace DocDocGo.Pages.Administrator
+namespace MediSphere.Pages.Administrator
 {
     [Authorize(Roles = "Administrator")]
     public class RegisterModel : PageModel

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DocDocGo.Pages.Prescriptions
+namespace MediSphere.Pages.Prescriptions
 {
     [Authorize]
     public class UpdatePrescriptionModel : PageModel

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DocDocGo.Pages.Appointments
+namespace MediSphere.Pages.Appointments
 {
     [Authorize]
     public class IndexModel : PageModel

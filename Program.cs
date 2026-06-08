@@ -1,11 +1,11 @@
 using System.Text;
-using DocDocGo;
-using DocDocGo.DAL;
-using DocDocGo.Middleware;
-using DocDocGo.Models;
-using DocDocGo.Repositories;
-using DocDocGo.Repositories.Interfaces;
-using DocDocGo.Services;
+using MediSphere;
+using MediSphere.DAL;
+using MediSphere.Middleware;
+using MediSphere.Models;
+using MediSphere.Repositories;
+using MediSphere.Repositories.Interfaces;
+using MediSphere.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -114,9 +114,9 @@ try
     {
         options.SwaggerDoc("v1", new OpenApiInfo
         {
-            Title = "DocDocGo Hospital Management API",
+            Title = "MediSphere Hospital Management API",
             Version = "v1",
-            Description = "REST API for DocDocGo - Hospital Management System"
+            Description = "REST API for MediSphere - Hospital Management System"
         });
         options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {
@@ -146,7 +146,7 @@ try
         app.UseSwagger();
         app.UseSwaggerUI(options =>
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "DocDocGo API v1");
+            options.SwaggerEndpoint("/swagger/v1/swagger.json", "MediSphere API v1");
             options.RoutePrefix = "api/docs";
         });
     }

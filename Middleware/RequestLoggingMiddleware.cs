@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace DocDocGo.Middleware
+namespace MediSphere.Middleware
 {
     public class RequestLoggingMiddleware
     {

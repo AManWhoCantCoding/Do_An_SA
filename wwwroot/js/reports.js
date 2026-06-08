@@ -6,7 +6,7 @@ $(document).ready(function () {
 
 async function loadReportsTable() {
     try {
-        const reports = await DocDocGoApi.reports.getAll();
+        const reports = await MediSphereApi.reports.getAll();
         const tbody = $('#reports-table-body');
         tbody.empty();
 

@@ -1,10 +1,10 @@
-using DocDocGo.Dto;
-using DocDocGo.Models;
-using DocDocGo.Repositories.Interfaces;
+using MediSphere.Dto;
+using MediSphere.Models;
+using MediSphere.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DocDocGo.Api.Controllers
+namespace MediSphere.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

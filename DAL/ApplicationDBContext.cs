@@ -1,9 +1,9 @@
-﻿using DocDocGo.Models;
+using MediSphere.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace DocDocGo.DAL
+namespace MediSphere.DAL
 { 
 /// <summary>
 /// Represents the application's database context, extending identitydbcontext.

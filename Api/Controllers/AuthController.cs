@@ -1,13 +1,13 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using DocDocGo.Dto;
-using DocDocGo.Models;
+using MediSphere.Dto;
+using MediSphere.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
-namespace DocDocGo.Api.Controllers
+namespace MediSphere.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

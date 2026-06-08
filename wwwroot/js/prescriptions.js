@@ -17,7 +17,7 @@ $(document).ready(function () {
     $('#add-prescription-form').on('submit', async function (e) {
         e.preventDefault();
         try {
-            await DocDocGoApi.prescriptions.create(readPrescriptionForm());
+            await MediSphereApi.prescriptions.create(readPrescriptionForm());
             window.location.href = '/Prescriptions/Index';
         } catch (err) {
             alert('Failed to add prescription: ' + err.message);
@@ -27,7 +27,7 @@ $(document).ready(function () {
     $('#update-prescription-form').on('submit', async function (e) {
         e.preventDefault();
         try {
-            await DocDocGoApi.prescriptions.update($('#prescriptionId').val(), readPrescriptionForm());
+            await MediSphereApi.prescriptions.update($('#prescriptionId').val(), readPrescriptionForm());
             window.location.href = '/Prescriptions/Index';
         } catch (err) {
             alert('Failed to update prescription: ' + err.message);
@@ -37,7 +37,7 @@ $(document).ready(function () {
     $('#delete-prescription-btn').on('click', async function () {
         if (!confirm('Delete this prescription?')) return;
         try {
-            await DocDocGoApi.prescriptions.delete($('#prescriptionId').val());
+            await MediSphereApi.prescriptions.delete($('#prescriptionId').val());
             window.location.href = '/Prescriptions/Index';
         } catch (err) {
             alert('Failed to delete prescription: ' + err.message);
@@ -56,7 +56,7 @@ function readPrescriptionForm() {
 }
 
 async function loadPatientOptions(selectSelector) {
-    const patients = await DocDocGoApi.patients.getAll();
+    const patients = await MediSphereApi.patients.getAll();
     const options = patients.map(function (p) {
         return '<option value="' + p.patientId + '">' + p.firstName + ' ' + p.lastName + '</option>';
     }).join('');
@@ -66,8 +66,8 @@ async function loadPatientOptions(selectSelector) {
 async function loadPrescriptionsTable() {
     try {
         const [prescriptions, patients] = await Promise.all([
-            DocDocGoApi.prescriptions.getAll(),
-            DocDocGoApi.patients.getAll()
+            MediSphereApi.prescriptions.getAll(),
+            MediSphereApi.patients.getAll()
         ]);
         const patientMap = {};
         patients.forEach(function (p) { patientMap[p.patientId] = p.firstName + ' ' + p.lastName; });
@@ -93,7 +93,7 @@ async function loadPrescriptionsTable() {
 }
 
 async function loadPrescriptionForEdit(id) {
-    const rx = await DocDocGoApi.prescriptions.getById(id);
+    const rx = await MediSphereApi.prescriptions.getById(id);
     $('#patientId').val(rx.patientId);
     $('#medicationName').val(rx.medicationName);
     $('#dosage').val(rx.dosage);

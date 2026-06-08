@@ -1,11 +1,11 @@
-using DocDocGo.Models;
+using MediSphere.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 
-namespace DocDocGo.Pages.Account
+namespace MediSphere.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {

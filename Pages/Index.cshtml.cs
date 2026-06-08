@@ -1,11 +1,11 @@
-﻿using DocDocGo.Models;
+using MediSphere.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DocDocGo.Pages
+namespace MediSphere.Pages
 {
     [AllowAnonymous]
     public class IndexModel : PageModel

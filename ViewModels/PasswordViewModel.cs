@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace DocDocGo.ViewModels
+namespace MediSphere.ViewModels
 {
     public class PasswordViewModel
     {

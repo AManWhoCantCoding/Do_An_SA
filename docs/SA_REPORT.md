@@ -1,5 +1,5 @@
 # BÁO CÁO LUẬN THIẾT KẾ KIẾN TRÚC PHẦN MỀM
-## DocDocGo — Hospital Management System
+## MediSphere — Hospital Management System
 
 **Môn học:** Thiết kế Kiến trúc Phần mềm  
 **Tài liệu tham khảo:** *Fundamentals of Software Architecture* — Mark Richards & Neal Ford  
@@ -25,7 +25,7 @@
 
 ### 1.1 Giới thiệu hệ thống
 
-**DocDocGo** là hệ thống quản lý bệnh viện (Hospital Management System) hỗ trợ:
+**MediSphere** là hệ thống quản lý bệnh viện (Hospital Management System) hỗ trợ:
 
 - Quản lý hồ sơ bệnh nhân
 - Đặt lịch hẹn khám bệnh
@@ -78,7 +78,7 @@ Bệnh viện cần một hệ thống tập trung thay thế quy trình giấy 
 
 ### 2.4 Non-Functional Requirements (NFR)
 
-| Thuộc tính | Yêu cầu | Giải pháp trong DocDocGo |
+| Thuộc tính | Yêu cầu | Giải pháp trong MediSphere |
 |---|---|---|
 | **Scalability** | Hỗ trợ tăng tải theo thời gian | Layered monolith; có thể tách API/Microservices sau; Docker-ready |
 | **Performance** | Phản hồi < 3s cho thao tác thường | EF Core + SQL Server; Repository pattern; logging đo thời gian request |
@@ -125,10 +125,10 @@ Bệnh viện cần một hệ thống tập trung thay thế quy trình giấy 
 
 ```mermaid
 C4Context
-    title System Context - DocDocGo
+    title System Context - MediSphere
     Person(staff, "Hospital Staff", "Manages patients and appointments")
     Person(admin, "Administrator", "Manages users and settings")
-    System(docdocgo, "DocDocGo", "Hospital Management System")
+    System(docdocgo, "MediSphere", "Hospital Management System")
     System_Ext(email, "SMTP Server", "Sends notification emails")
     SystemDb(db, "SQL Server", "Stores all application data")
 
@@ -142,7 +142,7 @@ C4Context
 
 ```mermaid
 C4Container
-    title Container Diagram - DocDocGo
+    title Container Diagram - MediSphere
     Person(user, "User", "Staff or Admin")
     Container(web, "Razor Pages UI", "ASP.NET Core", "Server-side rendered web interface")
     Container(api, "REST API", "ASP.NET Core Web API", "JSON endpoints with JWT")
@@ -288,7 +288,7 @@ ReportType ──< Report
 ### 6.2 Cấu trúc project
 
 ```
-DocDocGo/
+MediSphere/
 ├── Api/Controllers/       # REST API
 ├── Dto/                   # Data Transfer Objects
 ├── DAL/                   # DbContext
@@ -297,7 +297,7 @@ DocDocGo/
 ├── Services/              # Email, etc.
 ├── Pages/                 # Razor UI
 ├── Middleware/            # Request logging
-├── DocDocGo.Tests/        # Unit tests
+├── MediSphere.Tests/        # Unit tests
 ├── docs/SA_REPORT.md      # Báo cáo này
 ├── Dockerfile
 └── docker-compose.yml
@@ -366,7 +366,7 @@ DocDocGo/
 
 ### 8.1 Tổng kết
 
-DocDocGo đáp ứng yêu cầu bài luận SA bằng cách:
+MediSphere đáp ứng yêu cầu bài luận SA bằng cách:
 
 - Chọn domain cụ thể (quản lý bệnh viện)
 - Phân tích đầy đủ FR/NFR và stakeholders
@@ -401,4 +401,4 @@ DocDocGo đáp ứng yêu cầu bài luận SA bằng cách:
 
 ---
 
-*Báo cáo này có thể export sang PDF để nộp bài. Source code: repository DocDocGo.*
+*Báo cáo này có thể export sang PDF để nộp bài. Source code: repository MediSphere.*

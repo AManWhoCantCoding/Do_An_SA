@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     let patientsCache = [];
 
     $('#SelectedAppointment_StartTime, #NewAppointment_StartTime').datetimepicker({ format: 'YYYY-MM-DD HH:mm' });
@@ -11,7 +11,7 @@
     $('#add-appointment-form').on('submit', async function (e) {
         e.preventDefault();
         try {
-            await DocDocGoApi.appointments.create(readAppointmentForm('#add-appointment-form'));
+            await MediSphereApi.appointments.create(readAppointmentForm('#add-appointment-form'));
             $('#appointment-add').modal('hide');
             $('#calendar').fullCalendar('refetchEvents');
             $('#add-appointment-form')[0].reset();
@@ -24,7 +24,7 @@
         e.preventDefault();
         const id = $('#SelectedAppointmentId').val();
         try {
-            await DocDocGoApi.appointments.update(id, readAppointmentForm('#edit-appointment-form'));
+            await MediSphereApi.appointments.update(id, readAppointmentForm('#edit-appointment-form'));
             $('#appointment-edit').modal('hide');
             $('#calendar').fullCalendar('refetchEvents');
         } catch (err) {
@@ -36,7 +36,7 @@
         const id = $('#SelectedAppointmentId').val();
         if (!confirm('Delete this appointment?')) return;
         try {
-            await DocDocGoApi.appointments.delete(id);
+            await MediSphereApi.appointments.delete(id);
             $('#appointment-edit').modal('hide');
             $('#calendar').fullCalendar('refetchEvents');
         } catch (err) {
@@ -50,7 +50,7 @@
 });
 
 async function loadPatientsIntoSelects() {
-    patientsCache = await DocDocGoApi.patients.getAll();
+    patientsCache = await MediSphereApi.patients.getAll();
     const options = patientsCache.map(function (p) {
         return '<option value="' + p.patientId + '">' + p.firstName + ' ' + p.lastName + '</option>';
     }).join('');
@@ -66,7 +66,7 @@ function initCalendar() {
         },
         eventClick: async function (event) {
             try {
-                const data = await DocDocGoApi.appointments.getById(event.id);
+                const data = await MediSphereApi.appointments.getById(event.id);
                 $('#SelectedAppointment_Topic').val(data.topic);
                 $('#SelectedAppointment_PatientId').val(data.patientId);
                 $('#SelectedAppointment_StartTime').datetimepicker('date', moment(data.startTime));
@@ -85,7 +85,7 @@ function initCalendar() {
         firstDay: 1,
         events: async function (start, end, timezone, callback) {
             try {
-                const appointments = await DocDocGoApi.appointments.getAll();
+                const appointments = await MediSphereApi.appointments.getAll();
                 const events = appointments.map(function (a) {
                     return {
                         id: a.appointmentId,

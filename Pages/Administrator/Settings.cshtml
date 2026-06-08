@@ -1,92 +1,75 @@
-﻿@page
-@model DocDocGo.Pages.Administrator.SettingsModel
+@page
+@model MediSphere.Pages.Administrator.SettingsModel
 @{
     ViewData["Title"] = "Administrator Settings";
     Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
-
 }
-<h1>@ViewData["Title"]</h1>
 
-<body>
-    <div id="admin-settings">
-        <ul>
-            <li><a asp-action="#general">General User Settings</a></li>
-                    <li><a asp-page="/Administrator/Register">Register a new user</a></li>
-        </ul>
+<div class="ms-page-header">
+    <h2>Administrator Settings</h2>
+    <p>Manage staff accounts and system users.</p>
+</div>
 
-        <div id="general">
-            <h2>User Settings</h2>
-            <form class="d-flex">
-                <input id="searchBox" class="form-control me-sm-2" type="search" placeholder="Search">
-                <button class="btn btn-secondary my-2 my-sm-0" type="submit"><i class="bi bi-search"></i></button>
-            </form>
-            <div class="form-group" style="margin-top: 10px;">
-                <table class="table table-hover table-bordered table-striped" style="width:100%">
-                    <thead>
+<div class="ms-toolbar mb-3">
+    <a asp-page="/Administrator/Register" class="btn btn-primary">
+        <i class="bi bi-person-plus me-1"></i> Register a new user
+    </a>
+</div>
+
+<div class="ms-card" id="general">
+    <h3 style="font-size:1rem;font-weight:600;margin-bottom:16px;">User Settings</h3>
+    <form class="ms-search" onsubmit="return false;">
+        <input id="searchBox" class="form-control" type="search" placeholder="Search users...">
+        <button class="btn btn-primary" type="button"><i class="bi bi-search"></i></button>
+    </form>
+    <div class="ms-table-wrap">
+        <table class="table ms-table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                    <th>Email Address</th>
+                    <th>Date of Birth</th>
+                    <th>Contact Number</th>
+                    <th>Gender</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Users != null)
+                {
+                    @foreach (var user in Model.Users)
+                    {
                         <tr>
-                            <th>First Name</th>
-                            <th>Middle Name</th>
-                            <th>Last Name</th>
-                            <th>Email Address</th>
-                            <th>Date of Birth</th>
-                            <th>Contact Number</th>
-                            <th>Gender</th>
-                            <th>Actions</th>
+                            <td>@user.FirstName</td>
+                            <td>@user.MiddleName</td>
+                            <td>@user.LastName</td>
+                            <td>@user.UserName</td>
+                            <td>@user.DateOfBirth</td>
+                            <td class="contact-number">@user.PhoneNumber</td>
+                            <td>@user.Gender</td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    <a asp-page="/Administrator/UpdateUser" asp-route-id="@user.Id" class="btn btn-primary btn-icon" title="Edit">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-page="/Administrator/LockoutUser" asp-route-id="@user.Id" class="btn btn-secondary btn-icon" title="Lockout User">
+                                        <i class="bi bi-lock"></i>
+                                    </a>
+                                    <a asp-page="/Administrator/DeleteUser" asp-route-id="@user.Id" class="btn btn-danger btn-icon" title="Delete">
+                                        <i class="bi bi-trash-fill"></i>
+                                    </a>
+                                </div>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Users != null)
-                        {
-                            @foreach (var user in Model.Users)
-                            {
-                                <tr>
-                                    <td>@(user.FirstName)</td>
-                                    <td>@(user.MiddleName)</td>
-                                    <td>@(user.LastName)</td>
-                                    <td>@(user.UserName)</td>
-                                    <td>@(user.DateOfBirth)</td>
-                                    <td>@(user.PhoneNumber)</td>
-                                    <td>@(user.Gender)</td>
-
-                                    <td>
-                                        <ul class="list-inline">
-                                            <li class="list-inline-item">
-                                                <a asp-page="/Administrator/UpdateUser" asp-route-id="@user.Id" class="btn btn-primary my-2 my-sm-0"
-                                           data-toggle="tooltip" data-placement="top" title="Edit">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </a>
-                                            </li>
-                                            <li class="list-inline-item">
-
-                                                <a asp-page="/Administrator/LockoutUser" asp-route-id="@user.Id" class="btn btn-danger my-2 my-sm-0"
-                                           data-toggle="tooltip" data-placement="top" title="Lockout User">
-                                                        <i class="bi bi-lock"></i>
-                                                </a>
-                                            </li>
-
-                                            <li class="list-inline-item">
-                                                <a asp-page="/Administrator/DeleteUser" asp-route-id="@user.Id" class="btn btn-danger my-2 my-sm-0"
-                                           data-toggle="tooltip" data-placement="top" title="Delete">
-                                                    <i class="bi bi-trash-fill"></i>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
+                    }
+                }
+            </tbody>
+        </table>
     </div>
-    @section Scripts {
-        <script src="~/js/search.js"></script>@* This is for the searching logic, mainly with jquery.*@
-        <style>
-            .contact-number {
-                white-space: nowrap; /*makes sure line breaks aren't enforced on the column.*/
-            }
-        </style>
-    }
-    </body>
+</div>
+
+@section Scripts {
+    <script src="~/js/search.js"></script>
+}

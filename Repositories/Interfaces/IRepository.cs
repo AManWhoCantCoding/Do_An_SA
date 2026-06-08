@@ -1,4 +1,4 @@
-﻿namespace DocDocGo.Repositories.Interfaces
+namespace MediSphere.Repositories.Interfaces
 {
     public interface IRepository<T>
     {

@@ -1,4 +1,4 @@
-namespace DocDocGo
+namespace MediSphere
 {
     public static class AuthSchemes
     {

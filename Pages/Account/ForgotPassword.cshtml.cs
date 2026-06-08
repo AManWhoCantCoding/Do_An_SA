@@ -1,4 +1,4 @@
-using DocDocGo.Models;
+using MediSphere.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
 
-namespace DocDocGo.Pages.Account
+namespace MediSphere.Pages.Account
 {
     public class ForgotPasswordModel : PageModel
     {

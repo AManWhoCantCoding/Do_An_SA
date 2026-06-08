@@ -1,10 +1,10 @@
-﻿using NuGet.Packaging.Core;
-using DocDocGo.DAL;
-using DocDocGo.Models;
-using DocDocGo.Repositories.Interfaces;
+using NuGet.Packaging.Core;
+using MediSphere.DAL;
+using MediSphere.Models;
+using MediSphere.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace DocDocGo.Repositories
+namespace MediSphere.Repositories
 {
     public class AppointmentRepository : IAppointmentRepository<AppointmentModel>
     {

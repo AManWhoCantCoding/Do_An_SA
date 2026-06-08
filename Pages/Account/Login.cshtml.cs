@@ -1,11 +1,11 @@
-using DocDocGo.Models;
-using DocDocGo.ViewModels;
+using MediSphere.Models;
+using MediSphere.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Build.Framework;
 
-namespace DocDocGo.Pages.Account
+namespace MediSphere.Pages.Account
 {
     public class LoginModel : PageModel
     {

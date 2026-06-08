@@ -1,11 +1,16 @@
 @page
-@model DocDocGo.Pages.Prescriptions.AddPrescriptionModel
+@model MediSphere.Pages.Prescriptions.AddPrescriptionModel
 @{
     ViewData["Title"] = "Add Prescription";
     Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
 }
 
-<div class="container border" style="padding: 20px">
+<div class="ms-page-header">
+    <h2>Add Prescription</h2>
+    <p>Create a new prescription for a patient.</p>
+</div>
+
+<div class="ms-card ms-form-card">
     <form id="add-prescription-form">
         <div class="form-floating mb-3">
             <select id="patientId" class="form-control" required></select>
@@ -23,11 +28,11 @@
             <input id="paymentNeeded" class="form-check-input" type="checkbox" />
             <label class="form-check-label">Payment Needed</label>
         </div>
-        <div class="form-floating mb-3">
+        <div class="form-floating mb-4">
             <textarea id="notes" class="form-control"></textarea>
             <label>Notes</label>
         </div>
-        <button type="submit" class="btn btn-primary">Add Prescription (API)</button>
+        <button type="submit" class="btn btn-primary w-100">Add Prescription (API)</button>
     </form>
 </div>
 

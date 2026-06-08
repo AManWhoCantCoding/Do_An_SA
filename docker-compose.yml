@@ -5,18 +5,18 @@ services:
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "DocDocGo@2026!"
+      SA_PASSWORD: "MediSphere@2026!"
     ports:
       - "1433:1433"
     volumes:
       - sqldata:/var/opt/mssql
 
-  docdocgo:
+  medisphere:
     build: .
     ports:
       - "8080:80"
     environment:
-      ConnectionStrings__HospitalManagementSQLConnection: "Server=sqlserver;Database=DocDocGoDB;User Id=sa;Password=DocDocGo@2026!;TrustServerCertificate=True"
+      ConnectionStrings__HospitalManagementSQLConnection: "Server=sqlserver;Database=MediSphereDB;User Id=sa;Password=MediSphere@2026!;TrustServerCertificate=True"
       ASPNETCORE_ENVIRONMENT: Development
     depends_on:
       - sqlserver
