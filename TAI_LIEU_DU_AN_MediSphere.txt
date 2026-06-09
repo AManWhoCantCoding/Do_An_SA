@@ -3,7 +3,26 @@
           He thong Quan ly Benh vien (Hospital Management System)
           (Truoc day: DocDocGo — da doi ten va thiet ke lai giao dien)
 ================================================================================
-Ngay cap nhat: 09/06/2026 (kien truc 5 tang)
+Ngay cap nhat: 09/06/2026 (sua loi dang ky + danh gia SA)
+
+================================================================================
+PHAN 0: CAP NHAT GAN DAY (09/06/2026)
+================================================================================
+
+SUA LOI TAB DANG KY TREN TRANG AUTH
+- Nguyen nhan: Tab "Register" trong _AuthLayout tro toi /Administrator/Register
+  nhung trang nay co [Authorize(Roles = "Administrator")]. Nguoi chua dang nhap
+  bi chuyen ve /Account/Login nen tab van o "Log In".
+- Cach sua:
+  + Tao trang cong khai Pages/Account/Register (AllowAnonymous), gan vai tro Staff.
+  + Cap nhat _AuthLayout: tab Register -> /Account/Register.
+  + Cai thien wwwroot/js/site.js: so khop duong dan tab chinh xac (khong dung indexOf).
+  + Sua loi HTML checkbox (thieu dau nhay) trong Administrator/Register.cshtml.
+  + Admin tao user tu Settings van dung /Administrator/Register (chi Admin).
+
+XAC MINH DU AN
+- dotnet build MediSphere.sln: thanh cong
+- dotnet test MediSphere.sln: 4/4 test passed
 
 ================================================================================
 PHAN 1: PHAN LOAI FRONTEND VA BACKEND
@@ -66,6 +85,10 @@ Luong xu ly: Presentation -> Business -> Services -> Persistence -> Database
 Bao mat: Cookie (web) + JWT (API), scheme JwtOrCookie
 DI: DependencyInjection/ServiceCollectionExtensions.cs -> AddMediSphereLayers()
 Vai tro: Administrator, Staff
+
+Dang ky tai khoan:
+  - Cong khai: /Account/Register (tab Register tren trang auth) -> vai tro Staff
+  - Admin: /Administrator/Register (tu Administrator Settings) -> chi Administrator
 
 ================================================================================
 PHAN 3: CAU TRUC DU AN
@@ -7287,7 +7310,7 @@ FILE: Pages\Shared\_AuthLayout.cshtml
     <div class="ms-auth-card">
         <div class="ms-auth-tabs">
             <a class="ms-auth-tab" asp-page="/Account/Login">Log In</a>
-            <a class="ms-auth-tab" asp-page="/Administrator/Register">Register</a>
+            <a class="ms-auth-tab" asp-page="/Account/Register">Register</a>
         </div>
         <div class="ms-auth-body">
             @RenderBody()
@@ -9620,11 +9643,52 @@ FILE: wwwroot\js\site.js
         });
     }
 
+    function normalizePath(value) {
+        const normalized = (value || '').toLowerCase().replace(/\/$/, '');
+        return normalized || '/';
+    }
+
+    const currentPath = normalizePath(path);
+
     document.querySelectorAll('.ms-auth-tabs .ms-auth-tab').forEach(function (tab) {
-        const href = (tab.getAttribute('href') || '').toLowerCase();
-        if (href && path.indexOf(href.replace(/^\//, '')) !== -1) {
+        const href = tab.getAttribute('href');
+        if (!href) {
+            return;
+        }
+
+        let tabPath = href;
+        try {
+            tabPath = new URL(href, location.origin).pathname;
+        } catch (e) {
+            // Keep relative href fallback.
+        }
+
+        if (normalizePath(tabPath) === currentPath) {
             tab.classList.add('active');
         }
     });
 })();
+
+================================================================================
+PHAN 5: DANH GIA YEU CAU MON SA (Software Architecture)
+================================================================================
+Tham chieu: docs/SA_REPORT.md (file SA requirements.txt khong co trong repo)
+
+| Hang muc | Trang thai | Ghi chu |
+|----------|------------|---------|
+| Phan tich yeu cau (FR/NFR, stakeholder) | DAT | FR-01 den FR-10; bang NFR trong SA report |
+| Lua chon kien truc (trade-off) | DAT | Layered monolith + REST API, co phan tich trade-off |
+| Thiet ke kien truc (C4, component) | DAT | So do context, container, component trong SA report |
+| Thiet ke ky thuat (API, bao mat, DB) | DAT | JWT + Cookie, EF Core, Identity, Swagger |
+| Trien khai (code, phan tang) | DAT | 5 tang; build/test thanh cong |
+| Danh gia & huong phat trien | MOT PHAN | Co diem chat luong; HA/microservices de xuat sau |
+| DevOps & chat luong | DAT | GitHub Actions, Docker, Serilog, health checks |
+| Tai lieu & trinh bay | DAT | README, tai lieu tieng Viet, SA report |
+
+Tong ket: Du an dat yeu cau bai luon SA o muc tot. Khuyen nghi: nang cap .NET 6,
+mo rong unit test, xem xet phe duyet dang ky Staff trong moi truong production.
+
+================================================================================
+KET THUC TAI LIEU
+================================================================================
 

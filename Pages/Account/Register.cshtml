@@ -1,0 +1,67 @@
+@page
+@model MediSphere.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Pages/Shared/_AuthLayout.cshtml";
+}
+
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+    <div class="form-floating mb-3">
+        <input asp-for="CredentialModel.FirstName" class="form-control" aria-required="true" />
+        <label asp-for="CredentialModel.FirstName">First name</label>
+        <span asp-validation-for="CredentialModel.FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-floating mb-3">
+        <input asp-for="CredentialModel.MiddleName" class="form-control" />
+        <label asp-for="CredentialModel.MiddleName">Middle name</label>
+        <span asp-validation-for="CredentialModel.MiddleName" class="text-danger"></span>
+    </div>
+    <div class="form-floating mb-3">
+        <input asp-for="CredentialModel.LastName" class="form-control" aria-required="true" />
+        <label asp-for="CredentialModel.LastName">Last name</label>
+        <span asp-validation-for="CredentialModel.LastName" class="text-danger"></span>
+    </div>
+    <div class="form-floating mb-3">
+        <select asp-for="CredentialModel.Gender" class="form-select">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Non-Binary">Non-Binary</option>
+            <option value="Prefer not to say">Prefer not to say</option>
+            <option value="Custom">Custom</option>
+        </select>
+        <label asp-for="CredentialModel.Gender">Gender</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input asp-for="CredentialModel.Email" class="form-control" autocomplete="username" aria-required="true" />
+        <label asp-for="CredentialModel.Email">Email</label>
+        <span asp-validation-for="CredentialModel.Email" class="text-danger"></span>
+    </div>
+    <div class="form-floating mb-3">
+        <input asp-for="CredentialModel.PhoneNumber" class="form-control" autocomplete="tel" />
+        <label asp-for="CredentialModel.PhoneNumber">Phone number</label>
+        <span asp-validation-for="CredentialModel.PhoneNumber" class="text-danger"></span>
+    </div>
+    <div class="form-floating mb-3">
+        <input asp-for="CredentialModel.DateOfBirth" class="form-control" type="date" />
+        <label asp-for="CredentialModel.DateOfBirth">Date of birth</label>
+        <span asp-validation-for="CredentialModel.DateOfBirth" class="text-danger"></span>
+    </div>
+    <div class="form-floating mb-3">
+        <input asp-for="PWordModel.Password" class="form-control" autocomplete="new-password" aria-required="true" />
+        <label asp-for="PWordModel.Password">Password</label>
+        <span asp-validation-for="PWordModel.Password" class="text-danger"></span>
+    </div>
+    <div class="mb-3 form-check">
+        <input asp-for="CredentialModel.AcceptedTerms" class="form-check-input" type="checkbox" aria-required="true" />
+        <label asp-for="CredentialModel.AcceptedTerms" class="form-check-label">
+            I agree to the terms and conditions
+        </label>
+        <span asp-validation-for="CredentialModel.AcceptedTerms" class="text-danger d-block"></span>
+    </div>
+    <button type="submit" class="btn btn-primary w-100 btn-lg">Sign up</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

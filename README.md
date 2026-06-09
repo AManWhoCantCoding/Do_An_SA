@@ -25,6 +25,7 @@ MediSphere is a Hospital Management System — a modern web application for hosp
     <li><a href="#docker">Docker</a></li>
     <li><a href="#running-tests">Running Tests</a></li>
     <li><a href="#usage">Usage</a></li>
+    <li><a href="#sa-requirements-evaluation">SA Requirements Evaluation</a></li>
     <li><a href="#license">License</a></li>
   </ol>
 </details>
@@ -54,6 +55,11 @@ The system manages patient records, appointments, prescriptions, medical staff, 
 ### Staff Management
 - Maintain a database of doctors, nurses, and other personnel.
 - Track contact information, roles, and account settings via the administrative portal.
+
+### Authentication & Registration
+- Public login at `/Account/Login` and staff self-registration at `/Account/Register` (auth card with tab navigation).
+- Administrators can also register staff from **Administrator Settings** (`/Administrator/Register`, admin-only).
+- Password recovery, email confirmation, and two-factor authentication via ASP.NET Core Identity.
 
 ### Administrative Security
 - User management with ASP.NET Core Identity.
@@ -232,6 +238,12 @@ dotnet test MediSphere.sln
 
 ## Usage
 
+### Registration
+
+1. Open `/Account/Login` and click the **Register** tab (or go directly to `/Account/Register`).
+2. Complete the form and accept the terms. New accounts receive the **Staff** role.
+3. Confirm email if required by Identity settings, then sign in.
+
 ### Administrator
 
 ```
@@ -245,6 +257,25 @@ Password: Password123-_
 Email: pavel.sanjah-staff@hospitaltrust.com
 Password: Password123-_
 ```
+
+## SA Requirements Evaluation
+
+Evaluation against the Software Architecture (SA) course rubric in [docs/SA_REPORT.md](docs/SA_REPORT.md). *(Note: `SA requirements.txt` is not in the repository; criteria below follow the SA report and standard SA assignment structure.)*
+
+| Category | Status | Notes |
+|---|---|---|
+| **Requirements analysis** (FR/NFR, stakeholders) | Met | FR-01–FR-10 documented; stakeholders and NFRs in SA report |
+| **Architecture selection** (trade-offs) | Met | Layered monolith + REST API with documented trade-offs |
+| **Architecture design** (C4, components, data flow) | Met | Context/container/component diagrams in SA report |
+| **Technical design** (API, security, data model) | Met | JWT + Cookie auth, EF Core, Identity, Swagger |
+| **Implementation** (working code, layers) | Met | 5-layer structure; build succeeds; 4 unit tests pass |
+| **Evaluation & evolution** | Partial | Quality attributes scored; HA/microservices left as future work |
+| **DevOps & quality** (CI/CD, Docker, logging) | Met | GitHub Actions, Docker, Serilog, health checks |
+| **Documentation & presentation** | Met | README, Vietnamese docs, SA report |
+
+**Functional highlights:** patient/appointment/prescription/report CRUD, admin portal, REST API with JWT, Excel export, FullCalendar scheduling.
+
+**Gaps / recommendations:** upgrade from .NET 6 (EOL); expand test coverage beyond repositories; consider approval workflow for public staff registration in production.
 
 ## License
 

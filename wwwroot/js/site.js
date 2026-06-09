@@ -26,9 +26,27 @@
         });
     }
 
+    function normalizePath(value) {
+        const normalized = (value || '').toLowerCase().replace(/\/$/, '');
+        return normalized || '/';
+    }
+
+    const currentPath = normalizePath(path);
+
     document.querySelectorAll('.ms-auth-tabs .ms-auth-tab').forEach(function (tab) {
-        const href = (tab.getAttribute('href') || '').toLowerCase();
-        if (href && path.indexOf(href.replace(/^\//, '')) !== -1) {
+        const href = tab.getAttribute('href');
+        if (!href) {
+            return;
+        }
+
+        let tabPath = href;
+        try {
+            tabPath = new URL(href, location.origin).pathname;
+        } catch (e) {
+            // Keep relative href fallback.
+        }
+
+        if (normalizePath(tabPath) === currentPath) {
             tab.classList.add('active');
         }
     });

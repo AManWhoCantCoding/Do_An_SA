@@ -65,7 +65,7 @@ Bệnh viện cần một hệ thống tập trung thay thế quy trình giấy 
 
 | ID | Yêu cầu | Trạng thái |
 |---|---|---|
-| FR-01 | Đăng nhập / đăng xuất / quên mật khẩu | ✅ |
+| FR-01 | Đăng nhập / đăng ký / đăng xuất / quên mật khẩu | ✅ |
 | FR-02 | Phân quyền Administrator và Staff | ✅ |
 | FR-03 | CRUD bệnh nhân | ✅ |
 | FR-04 | CRUD lịch hẹn + lịch FullCalendar | ✅ |

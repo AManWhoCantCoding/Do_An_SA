@@ -64,9 +64,9 @@ namespace MediSphere.Pages.Administrator
 
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "Staff");
                     var userId = await _userManager.GetUserIdAsync(user);
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
