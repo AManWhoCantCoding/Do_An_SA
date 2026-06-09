@@ -3,7 +3,6 @@ $(document).ready(function () {
 
     const dateTimePickerOptions = {
         format: 'YYYY-MM-DD HH:mm',
-        widgetParent: 'body',
         icons: {
             time: 'bi bi-clock',
             date: 'bi bi-calendar',
