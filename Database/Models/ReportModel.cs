@@ -19,7 +19,6 @@ namespace MediSphere.Models
         public string? LastUpdatedBy { get; set; }
         public string Status { get; set; } = string.Empty;
         public bool IsReportPrinted { get; set; }
-        [ForeignKey("ReportType")]
         public int? ReportTypeId { get; set; }
         public ReportTypeModel? ReportTypeModel { get; set; }
     }

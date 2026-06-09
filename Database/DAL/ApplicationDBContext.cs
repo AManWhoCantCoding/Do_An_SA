@@ -21,6 +21,13 @@ namespace MediSphere.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ReportModel>()
+                .HasOne(r => r.ReportTypeModel)
+                .WithMany()
+                .HasForeignKey(r => r.ReportTypeId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<ReportTypeModel>().HasData(
         new ReportTypeModel { ReportTypeId = 1, TemplateType = "Medical Examination Report" },
         new ReportTypeModel { ReportTypeId = 2, TemplateType = "Hospital Revenue Report" },

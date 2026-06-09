@@ -23,6 +23,9 @@ namespace MediSphere.Pages.Reports
         public ReportModel NewReportModel { get; set; } = new();
 
         [BindProperty]
+        public string? ReportTypeName { get; set; }
+
+        [BindProperty]
         public int? SelectedTemplateTypeId { get; set; }
 
         public ReportTypeModel? SelectedReportType { get; set; }
@@ -38,6 +41,7 @@ namespace MediSphere.Pages.Reports
                 if (SelectedReportType != null)
                 {
                     SelectedTemplateTypeId = SelectedReportType.ReportTypeId;
+                    ReportTypeName = SelectedReportType.TemplateType;
                     NewReportModel.ReportDescription = SelectedReportType.TemplateType;
                 }
             }
@@ -53,13 +57,15 @@ namespace MediSphere.Pages.Reports
                 return Page();
             }
 
+            var reportTypeId = await _reportBusiness.ResolveReportTypeIdAsync(SelectedTemplateTypeId, ReportTypeName);
+
             var report = new ReportModel
             {
                 ReportDescription = NewReportModel.ReportDescription,
                 PatientId = NewReportModel.PatientId,
                 InitialStaffName = NewReportModel.InitialStaffName,
                 Status = NewReportModel.Status,
-                ReportTypeId = NewReportModel.ReportTypeId
+                ReportTypeId = reportTypeId
             };
 
             var result = await _reportBusiness.CreateReportAsync(report);
@@ -73,16 +79,28 @@ namespace MediSphere.Pages.Reports
             return RedirectToPage("/Reports/Index");
         }
 
-        public async Task<IActionResult> OnPostCreateTemplateType(ReportTypeModel reporttype)
+        public async Task<IActionResult> OnPostCreateTemplateType()
         {
-            reporttype.TemplateType = NewReportModel.ReportDescription;
-            reporttype.ReportTypeCreationTime = DateTime.Now;
-
-            if (!ModelState.IsValid)
+            if (string.IsNullOrWhiteSpace(ReportTypeName))
             {
+                ModelState.AddModelError(string.Empty, "Please enter a report type name before saving as template.");
                 await LoadFormDataAsync();
                 return Page();
             }
+
+            var reportTypes = await _reportBusiness.GetReportTypesAsync();
+            if (reportTypes.Any(t => string.Equals(t.TemplateType, ReportTypeName.Trim(), StringComparison.OrdinalIgnoreCase)))
+            {
+                ModelState.AddModelError(string.Empty, "This report type template already exists.");
+                await LoadFormDataAsync();
+                return Page();
+            }
+
+            var reporttype = new ReportTypeModel
+            {
+                TemplateType = ReportTypeName.Trim(),
+                ReportTypeCreationTime = DateTime.Now
+            };
 
             var result = await _reportBusiness.CreateReportTypeAsync(reporttype);
             if (!result.Success)

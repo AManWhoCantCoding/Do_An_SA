@@ -57,7 +57,18 @@ namespace MediSphere.Business
             report.CreatedAt = DateTime.Now;
             report.LastUpdated = DateTime.Now;
             report.Status ??= "Draft";
-            report.ReportTypeId = null;
+
+            if (report.ReportTypeId.HasValue)
+            {
+                try
+                {
+                    await _reportTypeService.GetByIdAsync(report.ReportTypeId.Value);
+                }
+                catch (KeyNotFoundException)
+                {
+                    return BusinessResult<ReportModel>.Fail("Selected report type does not exist.");
+                }
+            }
 
             var created = await _reportService.CreateAsync(report);
             return BusinessResult<ReportModel>.Ok(created);
@@ -112,6 +123,37 @@ namespace MediSphere.Business
         }
 
         public Task<IEnumerable<ReportTypeModel>> GetReportTypesAsync() => _reportTypeService.GetAllAsync();
+
+        public async Task<int?> ResolveReportTypeIdAsync(int? selectedTemplateTypeId, string? reportTypeName)
+        {
+            if (selectedTemplateTypeId.HasValue)
+            {
+                return selectedTemplateTypeId;
+            }
+
+            if (string.IsNullOrWhiteSpace(reportTypeName))
+            {
+                return null;
+            }
+
+            var trimmedName = reportTypeName.Trim();
+            var types = await _reportTypeService.GetAllAsync();
+            var existing = types.FirstOrDefault(t =>
+                string.Equals(t.TemplateType, trimmedName, StringComparison.OrdinalIgnoreCase));
+
+            if (existing != null)
+            {
+                return existing.ReportTypeId;
+            }
+
+            var created = await _reportTypeService.CreateAsync(new ReportTypeModel
+            {
+                TemplateType = trimmedName,
+                ReportTypeCreationTime = DateTime.Now
+            });
+
+            return created.ReportTypeId;
+        }
 
         public Task<IEnumerable<PatientModel>> GetPatientsForReportsAsync() => _patientService.GetAllAsync();
 

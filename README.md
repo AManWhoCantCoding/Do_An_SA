@@ -68,7 +68,9 @@ The system manages patient records, appointments, prescriptions, medical staff, 
 
 ### Reporting and Exporting
 - Generate customizable reports from patient data.
-- Save report templates for reuse.
+- **Report Type** field supports free text and selecting saved templates (HTML `datalist` on Generate A Report).
+- **Save As Template** stores the current report type for reuse without creating a report.
+- Report types are persisted via `ReportTypeId` and shown in the reports list.
 - Export to `.xlsx` format (ClosedXML).
 
 ### REST API
@@ -96,6 +98,20 @@ The interface was rebuilt from scratch (replacing the Bootswatch *Morph* neumorp
 - Status dropdowns use **1-based** sequential numbering (e.g. `1 - Created`, `1 - Scheduled`) instead of 100-based values.
 - Removed **(API)** labels from modal titles and submit buttons (the UI still calls the REST API via `api-client.js`).
 - Fixed appointment **date/time picker** controls: Bootstrap 5 compatibility for increment/decrement buttons, correct script load order, and modal z-index styling.
+
+### Report module fixes (Jun 2026)
+
+- **Report Type on Generate A Report:** text input with template suggestions (type new name or pick a saved template).
+- **Save As Template:** enabled; saves the report type name to `ReportTypes` without creating a report.
+- **Report type persistence:** `ReportTypeId` is saved when generating reports; types display in the reports table.
+- **Excel export:** fixed crash on save by returning file bytes instead of a disposed `MemoryStream`; export shows report type name.
+- **Database:** migration `FixReportTypeForeignKey` aligns the `Reports.ReportTypeId` foreign key (removes shadow column `ReportTypeModelReportTypeId`).
+
+After pulling these changes, apply migrations:
+
+```sh
+dotnet ef database update --project MediSphere.csproj
+```
 
 ## Logo Images
 

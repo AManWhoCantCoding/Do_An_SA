@@ -77,17 +77,15 @@ namespace MediSphere.Pages.Reports
                 worksheet.Cell("C2").Value = reportDto.CreatedAt;
                 worksheet.Cell("D2").Value = reportDto.Status;
                 worksheet.Cell("E2").Value = reportDto.InitialStaffName;
-                worksheet.Cell("F2").Value = reportDto.ReportTypeId?.ToString() ?? "N/A";
+                worksheet.Cell("F2").Value = reportDto.ReportTypeName ?? "N/A";
 
-                using (var stream = new MemoryStream())
-                {
-                    workbook.SaveAs(stream);
-                    var content = stream.ToArray();
+                using var stream = new MemoryStream();
+                workbook.SaveAs(stream);
+                var content = stream.ToArray();
 
-                    await _reportBusiness.MarkAsPrintedAsync(Id);
+                await _reportBusiness.MarkAsPrintedAsync(Id);
 
-                    return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fileName}.xlsx");
-                }
+                return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fileName}.xlsx");
             }
         }
     }

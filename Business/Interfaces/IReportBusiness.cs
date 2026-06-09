@@ -12,6 +12,7 @@ namespace MediSphere.Business.Interfaces
         Task<BusinessResult<ReportModel>> UpdateReportAsync(ReportModel report, string? updatedBy);
         Task<BusinessResult<ReportTypeModel>> CreateReportTypeAsync(ReportTypeModel reportType);
         Task<IEnumerable<ReportTypeModel>> GetReportTypesAsync();
+        Task<int?> ResolveReportTypeIdAsync(int? selectedTemplateTypeId, string? reportTypeName);
         Task<IEnumerable<PatientModel>> GetPatientsForReportsAsync();
         Task<BusinessResult<bool>> MarkAsPrintedAsync(int reportId);
     }

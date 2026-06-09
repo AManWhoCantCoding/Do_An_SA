@@ -8,20 +8,22 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="container">
-        <div asp-validation-summary="All" class="text-danger"></div>
+    <div asp-validation-summary="All" class="text-danger"></div>
     <form method="post">
         <div class="form-group">
-            <label asp-for="SelectedTemplateTypeId">Report Type:</label>
-            <select asp-for="SelectedTemplateTypeId" class="form-control" id="templateTypeSelect">
-                <option value="">-- Select a Template Type --</option>
+            <label asp-for="ReportTypeName">Report Type:</label>
+            <input asp-for="ReportTypeName" class="form-control" list="reportTypeTemplates" id="reportTypeInput" placeholder="Enter or select a report type" />
+            <datalist id="reportTypeTemplates">
                 @if (Model.ReportTypes != null)
                 {
                     @foreach (var reportType in Model.ReportTypes)
                     {
-                        <option value="@reportType.ReportTypeId" data-template="@reportType.TemplateType">@reportType.TemplateType</option>
+                        <option value="@reportType.TemplateType" data-id="@reportType.ReportTypeId"></option>
                     }
                 }
-            </select>
+            </datalist>
+            <input type="hidden" asp-for="SelectedTemplateTypeId" id="selectedTemplateTypeId" />
+            <small class="form-text text-muted">Type a new report type or pick a saved template. Use "Save As Template" to reuse a type later.</small>
         </div>
 
         <div class="form-group">
@@ -61,7 +63,7 @@
 
         <div class="form-group" style="margin-top: 10px;">
             <button type="submit" asp-page-handler="CreateReport" class="btn btn-primary">Generate Report</button>
-            <button type="submit" disabled="true" asp-page-handler="CreateTemplateType" class="btn btn-secondary">Save As Template</button>
+            <button type="submit" asp-page-handler="CreateTemplateType" class="btn btn-secondary">Save As Template</button>
         </div>
 
     </form>
@@ -69,11 +71,35 @@
 
 @section Scripts {
     <script>
-        document.getElementById('templateTypeSelect')?.addEventListener('change', function () {
-            const template = this.options[this.selectedIndex]?.dataset.template;
-            if (template) {
-                document.getElementById('NewReportModel_ReportDescription').value = template;
+        (function () {
+            const reportTypeInput = document.getElementById('reportTypeInput');
+            const selectedTemplateTypeId = document.getElementById('selectedTemplateTypeId');
+            const descriptionInput = document.getElementById('NewReportModel_ReportDescription');
+
+            function syncTemplateSelection() {
+                const value = reportTypeInput?.value?.trim() ?? '';
+                let matchedId = '';
+
+                document.querySelectorAll('#reportTypeTemplates option').forEach(function (option) {
+                    if (option.value === value) {
+                        matchedId = option.dataset.id || '';
+                    }
+                });
+
+                if (selectedTemplateTypeId) {
+                    selectedTemplateTypeId.value = matchedId;
+                }
             }
-        });
+
+            reportTypeInput?.addEventListener('input', syncTemplateSelection);
+            reportTypeInput?.addEventListener('change', function () {
+                syncTemplateSelection();
+                if (descriptionInput && reportTypeInput.value && !descriptionInput.value) {
+                    descriptionInput.value = reportTypeInput.value;
+                }
+            });
+
+            syncTemplateSelection();
+        })();
     </script>
 }

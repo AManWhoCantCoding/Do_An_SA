@@ -154,9 +154,6 @@ namespace MediSphere.Migrations
                     b.Property<int?>("ReportTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ReportTypeModelReportTypeId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -165,7 +162,7 @@ namespace MediSphere.Migrations
 
                     b.HasIndex("PatientId");
 
-                    b.HasIndex("ReportTypeModelReportTypeId");
+                    b.HasIndex("ReportTypeId");
 
                     b.ToTable("Reports");
                 });
@@ -501,7 +498,8 @@ namespace MediSphere.Migrations
 
                     b.HasOne("MediSphere.Models.ReportTypeModel", "ReportTypeModel")
                         .WithMany()
-                        .HasForeignKey("ReportTypeModelReportTypeId");
+                        .HasForeignKey("ReportTypeId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Patient");
 

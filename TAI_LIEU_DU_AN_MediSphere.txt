@@ -3,11 +3,28 @@
           He thong Quan ly Benh vien (Hospital Management System)
           (Truoc day: DocDocGo — da doi ten va thiet ke lai giao dien)
 ================================================================================
-Ngay cap nhat: 09/06/2026 (sua loi dang ky + danh gia SA)
+Ngay cap nhat: 09/06/2026 (sua module Reports + Report Type)
 
 ================================================================================
 PHAN 0: CAP NHAT GAN DAY (09/06/2026)
 ================================================================================
+
+SUA MODULE REPORTS VA REPORT TYPE (09/06/2026)
+- Report Type tren trang Generate A Report:
+  + Doi tu dropdown co dinh sang o nhap (input) ket hop datalist — vua go loai bao cao moi,
+    vua chon mau da luu (template).
+  + Nut "Save As Template" da duoc bat; luu ten loai bao cao vao bang ReportTypes
+    (khong tao report), chuyen ve trang Report Types.
+  + Nut "Generate Report" luu ReportTypeId vao database khi tao bao cao.
+- ReportBusiness: bo dong gan ReportTypeId = null; them ResolveReportTypeIdAsync de gan
+  template da chon hoac tim/tao loai bao cao theo ten nhap.
+- ReportRepository.GetByIdAsync: Include ReportTypeModel de hien thi ten loai bao cao.
+- Export Excel (ExportReport):
+  + Sua loi ung dung dung khi luu file: tra ve byte[] thay vi MemoryStream da dispose.
+  + Cot Report Type hien thi ten (ReportTypeName) thay vi chi ID.
+- Database: migration FixReportTypeForeignKey — su dung cot Reports.ReportTypeId lam FK
+  dung (xoa cot shadow ReportTypeModelReportTypeId).
+- Sau khi pull code: chay "dotnet ef database update --project MediSphere.csproj"
 
 CAP NHAT GIAO DIEN VA TRANG THAI (09/06/2026)
 - Doi so trang thai tu 100-based sang 1-based (vd: "1 - Created", "1 - Scheduled")

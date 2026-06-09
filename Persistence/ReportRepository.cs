@@ -30,7 +30,9 @@ namespace MediSphere.Persistence
 
         public async Task<ReportModel> GetByIdAsync(int id)
         {
-            var report = await _dbcontext.Reports.FindAsync(id);
+            var report = await _dbcontext.Reports
+                .Include(r => r.ReportTypeModel)
+                .FirstOrDefaultAsync(r => r.ReportId == id);
             if (report == null)
             {
                 throw new KeyNotFoundException($"Report {id} not found.");

@@ -1,7 +1,7 @@
 @page
 @model MediSphere.Pages.Reports.ExportReportModel
 @{
-    ViewData["Title"] = "Generate Report";
+    ViewData["Title"] = "Export Report";
     Layout = "~/Pages/Shared/_DashboardLayout.cshtml";
 }
 
@@ -9,7 +9,7 @@
 
 <p>Please enter the file name to use for exporting :)</p>
 
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div asp-validation-summary="All" class="text-danger"></div>
 
 <div class="container border" style="padding: 20px">
     <div class="row">
