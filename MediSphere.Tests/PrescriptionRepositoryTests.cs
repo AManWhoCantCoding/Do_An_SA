@@ -1,6 +1,6 @@
 using MediSphere.DAL;
 using MediSphere.Models;
-using MediSphere.Repositories;
+using MediSphere.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 

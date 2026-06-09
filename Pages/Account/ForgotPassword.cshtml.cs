@@ -48,7 +48,7 @@ namespace MediSphere.Pages.Account
                 var callbackUrl = Url.Page(
                     "/Account/ResetPassword",
                     pageHandler: null,
-                    values: new {  code },
+                    values: new { code, email = Input.Email },
                     protocol: Request.Scheme);
 
                 await _emailSender.SendEmailAsync(

@@ -3,12 +3,9 @@ using MediSphere;
 using MediSphere.DAL;
 using MediSphere.Middleware;
 using MediSphere.Models;
-using MediSphere.Repositories;
-using MediSphere.Repositories.Interfaces;
-using MediSphere.Services;
+using MediSphere.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -29,11 +26,7 @@ try
     builder.Services.AddDbContext<ApplicationDBContext>(options =>
         options.UseSqlServer(connString));
 
-    builder.Services.AddScoped<IAppointmentRepository<AppointmentModel>, AppointmentRepository>();
-    builder.Services.AddScoped<IRepository<PatientModel>, PatientRepository>();
-    builder.Services.AddScoped<IRepository<PrescriptionModel>, PrescriptionRepository>();
-    builder.Services.AddScoped<IRepository<ReportModel>, ReportRepository>();
-    builder.Services.AddScoped<IRepository<ReportTypeModel>, ReportTypeRepository>();
+    builder.Services.AddMediSphereLayers();
 
     builder.Services.AddIdentity<UserModel, IdentityRole<int>>(options =>
     {
@@ -100,7 +93,6 @@ try
     });
 
     builder.Services.Configure<SmtpSettings>(builder.Configuration.GetSection("SmtpSettings"));
-    builder.Services.AddTransient<IEmailSender, EmailSender>();
 
     builder.Services.AddControllers();
     builder.Services.AddRazorPages();

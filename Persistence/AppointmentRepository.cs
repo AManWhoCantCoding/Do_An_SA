@@ -1,10 +1,9 @@
-using NuGet.Packaging.Core;
 using MediSphere.DAL;
 using MediSphere.Models;
-using MediSphere.Repositories.Interfaces;
+using MediSphere.Persistence.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace MediSphere.Repositories
+namespace MediSphere.Persistence
 {
     public class AppointmentRepository : IAppointmentRepository<AppointmentModel>
     {
@@ -18,9 +17,7 @@ namespace MediSphere.Repositories
         public async Task<AppointmentModel> CreateAsync(AppointmentModel entity)
         {
             await _dbcontext.Appointments.AddAsync(entity);
-
             await _dbcontext.SaveChangesAsync();
-
             return entity;
         }
 
@@ -34,8 +31,7 @@ namespace MediSphere.Repositories
             var appointment = await _dbcontext.Appointments.FindAsync(id);
             if (appointment == null)
             {
-
-                throw new Exception("appointment not found");
+                throw new KeyNotFoundException($"Appointment {id} not found.");
             }
             return appointment;
         }
@@ -43,9 +39,7 @@ namespace MediSphere.Repositories
         public async Task<AppointmentModel> UpdateAsync(AppointmentModel entity)
         {
             _dbcontext.Entry(entity).CurrentValues.SetValues(entity);
-
             await _dbcontext.SaveChangesAsync();
-
             return entity;
         }
 
@@ -56,5 +50,4 @@ namespace MediSphere.Repositories
             return entity;
         }
     }
-    
 }

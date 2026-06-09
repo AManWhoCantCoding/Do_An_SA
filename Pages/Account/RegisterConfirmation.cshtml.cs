@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using MediSphere.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
 
 namespace MediSphere.Pages.Account
 {
@@ -19,12 +19,12 @@ namespace MediSphere.Pages.Account
     public class RegisterConfirmationModel : PageModel
     {
         private readonly UserManager<UserModel> _userManager;
-        private readonly IEmailSender _sender;
+        private readonly SmtpSettings _smtpSettings;
 
-        public RegisterConfirmationModel(UserManager<UserModel> userManager, IEmailSender sender)
+        public RegisterConfirmationModel(UserManager<UserModel> userManager, IOptions<SmtpSettings> smtpSettings)
         {
             _userManager = userManager;
-            _sender = sender;
+            _smtpSettings = smtpSettings.Value;
         }
 
         /// <summary>
@@ -60,19 +60,17 @@ namespace MediSphere.Pages.Account
             }
 
             Email = email;
-            // Once you add a real email sender, you should remove this code that lets you confirm the account
-            DisplayConfirmAccountLink = true;
-            if (DisplayConfirmAccountLink)
-            {
-                var userId = await _userManager.GetUserIdAsync(user);
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-                EmailConfirmationUrl = Url.Page(
-                    "/Account/ConfirmEmail",
-                    pageHandler: null,
-                    values: new { userId = userId, code = code, returnUrl = returnUrl },
-                    protocol: Request.Scheme);
-            }
+
+            var userId = await _userManager.GetUserIdAsync(user);
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            EmailConfirmationUrl = Url.Page(
+                "/Account/ConfirmEmail",
+                pageHandler: null,
+                values: new { userId = userId, code = code, returnUrl = returnUrl },
+                protocol: Request.Scheme);
+
+            DisplayConfirmAccountLink = !_smtpSettings.IsConfigured;
 
             return Page();
         }

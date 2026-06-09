@@ -1,9 +1,9 @@
 using MediSphere.DAL;
 using MediSphere.Models;
-using MediSphere.Repositories.Interfaces;
+using MediSphere.Persistence.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace MediSphere.Repositories
+namespace MediSphere.Persistence
 {
     public class ReportTypeRepository : IRepository<ReportTypeModel>
     {
@@ -17,9 +17,7 @@ namespace MediSphere.Repositories
         public async Task<ReportTypeModel> CreateAsync(ReportTypeModel entity)
         {
             await _dbcontext.ReportTypes.AddAsync(entity);
-
             await _dbcontext.SaveChangesAsync();
-
             return entity;
         }
 
@@ -30,21 +28,18 @@ namespace MediSphere.Repositories
 
         public async Task<ReportTypeModel> GetByIdAsync(int id)
         {
-            var report = await _dbcontext.ReportTypes.FindAsync(id);
-            if (report == null)
+            var reportType = await _dbcontext.ReportTypes.FindAsync(id);
+            if (reportType == null)
             {
-
-                throw new Exception("report type not found");
+                throw new KeyNotFoundException($"Report type {id} not found.");
             }
-            return report;
+            return reportType;
         }
 
         public async Task<ReportTypeModel> UpdateAsync(ReportTypeModel entity)
         {
             _dbcontext.Entry(entity).CurrentValues.SetValues(entity);
-
             await _dbcontext.SaveChangesAsync();
-
             return entity;
         }
 

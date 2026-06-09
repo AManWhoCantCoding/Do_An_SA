@@ -1,7 +1,6 @@
+using MediSphere.Business.Interfaces;
 using MediSphere.Models;
-using MediSphere.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MediSphere.Pages.Reports
@@ -9,18 +8,18 @@ namespace MediSphere.Pages.Reports
     [Authorize]
     public class ReportTypesModel : PageModel
     {
-        private IRepository<ReportTypeModel> _dbcontext;
-        public IEnumerable<ReportTypeModel> ReportTypes { get; set; }
+        private readonly IReportBusiness _reportBusiness;
 
-        public ReportTypesModel(IRepository<ReportTypeModel> dbcontext)
+        public IEnumerable<ReportTypeModel> ReportTypes { get; set; } = Enumerable.Empty<ReportTypeModel>();
+
+        public ReportTypesModel(IReportBusiness reportBusiness)
         {
-            _dbcontext = dbcontext;
+            _reportBusiness = reportBusiness;
         }
 
         public async Task OnGet()
         {
-            ReportTypes = await _dbcontext.GetAsync();
-
+            ReportTypes = await _reportBusiness.GetReportTypesAsync();
         }
     }
 }

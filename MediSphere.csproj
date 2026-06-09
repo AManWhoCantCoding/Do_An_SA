@@ -8,22 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Pages\Account\Pages\**" />
-    <Content Remove="Pages\Account\Pages\**" />
-    <EmbeddedResource Remove="Pages\Account\Pages\**" />
-    <None Remove="Pages\Account\Pages\**" />
     <Compile Remove="MediSphere.Tests\**" />
     <Content Remove="MediSphere.Tests\**" />
     <EmbeddedResource Remove="MediSphere.Tests\**" />
     <None Remove="MediSphere.Tests\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Models\RolesModel.cs" />
-    <Compile Remove="Models\UserRolesModel.cs" />
-    <Compile Remove="Repositories\Interfaces\IPatientRepository.cs" />
-    <Compile Remove="Repositories\Interfaces\IPrescriptionRepository.cs" />
-    <Compile Remove="Repositories\Interfaces\IReportRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,7 +40,6 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.19" />
     <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="4.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
-    <PackageReference Include="SendGrid" Version="9.28.1" />
   </ItemGroup>
 
 </Project>

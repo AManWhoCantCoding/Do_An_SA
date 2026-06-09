@@ -1,5 +1,5 @@
+using MediSphere.Business.Interfaces;
 using MediSphere.Models;
-using MediSphere.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -9,29 +9,25 @@ namespace MediSphere.Pages.Reports
     [Authorize]
     public class ReportGeneratorModel : PageModel
     {
-        private readonly IRepository<ReportModel> _dbContext;
-        private readonly IRepository<ReportTypeModel> _reportTypeContext;
-        private readonly IRepository<PatientModel> _patientcontext;
+        private readonly IReportBusiness _reportBusiness;
 
-        public IEnumerable<PatientModel> Patients { get; set; }
-        public IEnumerable<ReportTypeModel> ReportTypes { get; set; }
+        public IEnumerable<PatientModel> Patients { get; set; } = Enumerable.Empty<PatientModel>();
+        public IEnumerable<ReportTypeModel> ReportTypes { get; set; } = Enumerable.Empty<ReportTypeModel>();
 
-        public ReportGeneratorModel(IRepository<ReportModel> dbContext, IRepository<ReportTypeModel> typeDbContext, IRepository<PatientModel> patientDbContext)
+        public ReportGeneratorModel(IReportBusiness reportBusiness)
         {
-            _dbContext = dbContext;
-            _reportTypeContext = typeDbContext;
-            _patientcontext = patientDbContext;
+            _reportBusiness = reportBusiness;
         }
 
         [BindProperty]
-        public ReportModel NewReportModel { get; set; }
+        public ReportModel NewReportModel { get; set; } = new();
 
-        public ReportTypeModel SelectedReportType { get; set; }
+        public ReportTypeModel? SelectedReportType { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int reportId)
         {
-            Patients = await _patientcontext.GetAsync();
-            ReportTypes = await _reportTypeContext.GetAsync();
+            Patients = await _reportBusiness.GetPatientsForReportsAsync();
+            ReportTypes = await _reportBusiness.GetReportTypesAsync();
 
             if (reportId != 0)
             {
@@ -48,23 +44,29 @@ namespace MediSphere.Pages.Reports
 
         public async Task<IActionResult> OnPostCreateReport()
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-               var ReportData = new ReportModel
-                {
-                    ReportDescription = NewReportModel.ReportDescription,
-                    PatientId = NewReportModel.PatientId,
-                    InitialStaffName = NewReportModel.InitialStaffName,
-                    Status = NewReportModel.Status,
-                    CreatedAt = DateTime.Now,
-                    LastUpdated = DateTime.Now
-                };
-
-                await _dbContext.CreateAsync(ReportData);
-                return RedirectToPage("/Reports/Index");
-
+                await LoadFormDataAsync();
+                return Page();
             }
-            return Page();
+
+            var report = new ReportModel
+            {
+                ReportDescription = NewReportModel.ReportDescription,
+                PatientId = NewReportModel.PatientId,
+                InitialStaffName = NewReportModel.InitialStaffName,
+                Status = NewReportModel.Status
+            };
+
+            var result = await _reportBusiness.CreateReportAsync(report);
+            if (!result.Success)
+            {
+                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Could not create report.");
+                await LoadFormDataAsync();
+                return Page();
+            }
+
+            return RedirectToPage("/Reports/Index");
         }
 
         public async Task<IActionResult> OnPostCreateTemplateType(ReportTypeModel reporttype)
@@ -72,16 +74,27 @@ namespace MediSphere.Pages.Reports
             reporttype.TemplateType = NewReportModel.ReportDescription;
             reporttype.ReportTypeCreationTime = DateTime.Now;
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-
-                await _reportTypeContext.CreateAsync(reporttype);
-
-                return RedirectToPage("/Reports/ReportType");
+                await LoadFormDataAsync();
+                return Page();
             }
-            return Page();
+
+            var result = await _reportBusiness.CreateReportTypeAsync(reporttype);
+            if (!result.Success)
+            {
+                ModelState.AddModelError(string.Empty, result.ErrorMessage ?? "Could not create report type.");
+                await LoadFormDataAsync();
+                return Page();
+            }
+
+            return RedirectToPage("/Reports/ReportTypes");
         }
 
-
+        private async Task LoadFormDataAsync()
+        {
+            Patients = await _reportBusiness.GetPatientsForReportsAsync();
+            ReportTypes = await _reportBusiness.GetReportTypesAsync();
+        }
     }
 }

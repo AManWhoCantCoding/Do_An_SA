@@ -18,7 +18,8 @@ MediSphere is a Hospital Management System — a modern web application for hosp
     <li><a href="#ui-design">UI Design</a></li>
     <li><a href="#software-architecture">Software Architecture</a></li>
     <li><a href="#technologies-used">Tech Stack</a></li>
-    <li><a href="#unused-files">Unused / Redundant Files</a></li>
+    <li><a href="#email-smtp">Email (SMTP)</a></li>
+    <li><a href="#layered-architecture">Layered Architecture</a></li>
     <li><a href="#installation">Installation</a></li>
     <li><a href="#api-usage">API Usage</a></li>
     <li><a href="#docker">Docker</a></li>
@@ -86,8 +87,8 @@ The interface was rebuilt from scratch (replacing the Bootswatch *Morph* neumorp
 ## Software Architecture
 
 - **Report:** [docs/SA_REPORT.md](docs/SA_REPORT.md)
-- **Architecture:** Layered (N-tier) monolith + REST API
-- **Patterns:** Repository pattern, DTOs, dual auth (Cookie + JWT)
+- **Architecture:** 5-layer monolith (Presentation → Business → Services → Persistence → Database) + REST API
+- **Patterns:** Business layer, service layer, repository pattern, DTOs, dual auth (Cookie + JWT)
 - **DevOps:** GitHub Actions CI/CD, Docker, docker-compose
 - **Quality:** Unit tests (xUnit), Serilog, health checks
 
@@ -100,24 +101,56 @@ The interface was rebuilt from scratch (replacing the Bootswatch *Morph* neumorp
 | API | JWT Bearer, Swagger/OpenAPI, DTOs |
 | Database | SQL Server, Entity Framework Core |
 | DevOps | GitHub Actions, Docker, Serilog, Health Checks, xUnit |
-| Libraries | ClosedXML, SendGrid |
+| Libraries | ClosedXML, System.Net.Mail (SMTP) |
 
-## Unused / Redundant Files
+## Email (SMTP)
 
-These items are **not used** by the running application:
+Identity flows (confirm email, forgot password, account notifications) use `Services/EmailSender.cs` via `IEmailSender`.
 
-| Item | Reason |
-|---|---|
-| `Models/RolesModel.cs` | Excluded in `.csproj`; file does not exist (Identity roles used instead) |
-| `Models/UserRolesModel.cs` | Excluded in `.csproj`; file does not exist |
-| `Repositories/Interfaces/IPatientRepository.cs` | Excluded in `.csproj`; file does not exist (`IRepository<T>` used) |
-| `Repositories/Interfaces/IPrescriptionRepository.cs` | Excluded in `.csproj`; file does not exist |
-| `Repositories/Interfaces/IReportRepository.cs` | Excluded in `.csproj`; file does not exist |
-| `Pages/Account/Pages/**` | Excluded in `.csproj`; scaffold folder never created |
-| `itext7` NuGet package | Removed — no PDF generation code in the project |
-| Old `siteTheme.css` (Bootswatch Morph, ~334 KB) | Replaced by custom MediSphere theme (~15 KB) |
+Configure `SmtpSettings` in `appsettings.json`:
 
-> **Note:** `Compile Remove` entries in `MediSphere.csproj` can be deleted safely — they reference files that no longer exist on disk.
+```json
+"SmtpSettings": {
+  "SmtpServer": "smtp.example.com",
+  "SmtpPort": 587,
+  "SmtpUsername": "your-user",
+  "SmtpPassword": "your-password",
+  "FromEmail": "noreply@hospitaltrust.com",
+  "FromDisplayName": "MediSphere"
+}
+```
+
+For local testing, create a free inbox at [Ethereal Email](https://ethereal.email/create) and paste the generated SMTP credentials. Sent messages appear in the Ethereal web inbox (not a real mailbox).
+
+## Layered Architecture
+
+MediSphere follows a **5-layer** architecture. Requests flow top-down; each layer only talks to the layer directly below it.
+
+```
+Presentation → Business → Services → Persistence → Database
+```
+
+| Layer | Folder | Responsibility |
+|---|---|---|
+| **Presentation** | `Pages/`, `Api/`, `Dto/`, `ViewModels/`, `wwwroot/` | Razor UI, REST controllers, DTOs, client JS |
+| **Business** | `Business/` | Validation, business rules, DTO mapping (`*Business`) |
+| **Services** | `Services/` | Application services orchestrating persistence (`*Service`, `EmailSender`, `NotificationService`) |
+| **Persistence** | `Persistence/` | Repository pattern — CRUD over EF Core (`*Repository`) |
+| **Database** | `Database/`, `Migrations/` | Entities (`Database/Models/`), `ApplicationDBContext`, SQL Server schema |
+
+**New services added:**
+- `PatientService`, `AppointmentService`, `PrescriptionService`, `ReportService`, `ReportTypeService`
+- `DashboardService` — aggregate counts for the Dashboard
+- `NotificationService` — appointment/report email notifications via SMTP
+- `EmailSender` — ASP.NET Identity email flows
+
+DI registration: `DependencyInjection/ServiceCollectionExtensions.cs` → `AddMediSphereLayers()` (called from `Program.cs`).
+
+## Architecture Notes
+
+- API controllers inject `*Business` interfaces (not repositories directly).
+- Report Razor pages use `IReportBusiness`; Dashboard uses `IDashboardBusiness`.
+- Patient/Appointment/Prescription list pages still call the REST API via `api-client.js` (Presentation → API → Business).
 
 ## Installation
 
@@ -135,7 +168,9 @@ dotnet restore MediSphere.sln
 dotnet build MediSphere.sln
 ```
 
-3. Set up the database (see below).
+3. Configure `ConnectionStrings:HospitalManagementSQLConnection` and `SmtpSettings` in `appsettings.json` (or `appsettings.Development.json` for local overrides).
+
+4. Set up the database (see below).
 
 ### Restore the Database
 

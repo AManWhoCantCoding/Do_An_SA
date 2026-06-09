@@ -5,9 +5,6 @@ using System.Net.Mail;
 
 namespace MediSphere.Services
 {
-    /// <summary>
-    /// You could implement this with your own values to test the email service :)
-    /// </summary>
     public class EmailSender : IEmailSender
     {
         private readonly ILogger<EmailSender> _logger;
@@ -21,30 +18,45 @@ namespace MediSphere.Services
 
         public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
+            if (!_smtpSettings.IsConfigured)
+            {
+                _logger.LogWarning(
+                    "SMTP is not configured. Email to {Email} with subject '{Subject}' was not sent.",
+                    toEmail,
+                    subject);
+                throw new InvalidOperationException(
+                    "SMTP settings are not configured. Update SmtpSettings in appsettings.json.");
+            }
+
             try
             {
-                using (var client = new SmtpClient(_smtpSettings.SmtpServer, _smtpSettings.SmtpPort))
+                using var client = new SmtpClient(_smtpSettings.SmtpServer, _smtpSettings.SmtpPort)
                 {
-                    client.Credentials = new NetworkCredential(_smtpSettings.SmtpUsername, _smtpSettings.SmtpPassword);
-                    client.EnableSsl = true;
+                    Credentials = new NetworkCredential(_smtpSettings.SmtpUsername, _smtpSettings.SmtpPassword),
+                    EnableSsl = true
+                };
 
-                    var mailMessage = new MailMessage
-                    {
-                        From = new MailAddress(_smtpSettings.SmtpUsername),
-                        Subject = subject,
-                        Body = message,
-                        IsBodyHtml = true
-                    };
-                    mailMessage.To.Add(toEmail);
+                var fromAddress = _smtpSettings.FromEmail ?? _smtpSettings.SmtpUsername;
+                var from = string.IsNullOrWhiteSpace(_smtpSettings.FromDisplayName)
+                    ? new MailAddress(fromAddress)
+                    : new MailAddress(fromAddress, _smtpSettings.FromDisplayName);
 
-                    await client.SendMailAsync(mailMessage);
+                using var mailMessage = new MailMessage
+                {
+                    From = from,
+                    Subject = subject,
+                    Body = message,
+                    IsBodyHtml = true
+                };
+                mailMessage.To.Add(toEmail);
 
-                    _logger.LogInformation($"Email to {toEmail} sent successfully!");
-                }
+                await client.SendMailAsync(mailMessage);
+
+                _logger.LogInformation("Email to {Email} sent successfully.", toEmail);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed to send email to {toEmail}. Error: {ex.Message}");
+                _logger.LogError(ex, "Failed to send email to {Email}.", toEmail);
                 throw;
             }
         }

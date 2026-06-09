@@ -1,6 +1,5 @@
+using MediSphere.Business.Interfaces;
 using MediSphere.Dto;
-using MediSphere.Models;
-using MediSphere.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,46 +10,24 @@ namespace MediSphere.Api.Controllers
     [Authorize(AuthenticationSchemes = AuthSchemes.JwtOrCookie)]
     public class ReportsController : ControllerBase
     {
-        private readonly IRepository<ReportModel> _repository;
+        private readonly IReportBusiness _reportBusiness;
 
-        public ReportsController(IRepository<ReportModel> repository)
+        public ReportsController(IReportBusiness reportBusiness)
         {
-            _repository = repository;
+            _reportBusiness = reportBusiness;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReportDto>>> GetAll()
         {
-            var reports = await _repository.GetAsync();
-            return Ok(reports.Select(MapToDto));
+            return Ok(await _reportBusiness.GetAllAsync());
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ReportDto>> GetById(int id)
         {
-            try
-            {
-                return Ok(MapToDto(await _repository.GetByIdAsync(id)));
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            var report = await _reportBusiness.GetByIdAsync(id);
+            return report == null ? NotFound() : Ok(report);
         }
-
-        private static ReportDto MapToDto(ReportModel report) => new()
-        {
-            ReportId = report.ReportId,
-            PatientId = report.PatientId,
-            ReportDescription = report.ReportDescription,
-            InitialStaffName = report.InitialStaffName,
-            CreatedAt = report.CreatedAt,
-            LastUpdated = report.LastUpdated,
-            LastUpdatedBy = report.LastUpdatedBy,
-            Status = report.Status,
-            IsReportPrinted = report.IsReportPrinted,
-            ReportTypeId = report.ReportTypeId,
-            ReportTypeName = report.ReportTypeModel?.TemplateType
-        };
     }
 }

@@ -1,6 +1,5 @@
+using MediSphere.Business.Interfaces;
 using MediSphere.Dto;
-using MediSphere.Models;
-using MediSphere.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,40 +10,32 @@ namespace MediSphere.Api.Controllers
     [Authorize(AuthenticationSchemes = AuthSchemes.JwtOrCookie)]
     public class PrescriptionsController : ControllerBase
     {
-        private readonly IRepository<PrescriptionModel> _repository;
+        private readonly IPrescriptionBusiness _prescriptionBusiness;
         private readonly ILogger<PrescriptionsController> _logger;
 
-        public PrescriptionsController(IRepository<PrescriptionModel> repository, ILogger<PrescriptionsController> logger)
+        public PrescriptionsController(IPrescriptionBusiness prescriptionBusiness, ILogger<PrescriptionsController> logger)
         {
-            _repository = repository;
+            _prescriptionBusiness = prescriptionBusiness;
             _logger = logger;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PrescriptionDto>>> GetAll()
         {
-            var prescriptions = await _repository.GetAsync();
-            return Ok(prescriptions.Select(MapToDto));
+            return Ok(await _prescriptionBusiness.GetAllAsync());
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<PrescriptionDto>> GetById(int id)
         {
-            try
-            {
-                return Ok(MapToDto(await _repository.GetByIdAsync(id)));
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            var prescription = await _prescriptionBusiness.GetByIdAsync(id);
+            return prescription == null ? NotFound() : Ok(prescription);
         }
 
         [HttpGet("patient/{patientId:int}")]
         public async Task<ActionResult<IEnumerable<PrescriptionDto>>> GetByPatient(int patientId)
         {
-            var prescriptions = await _repository.GetAsync();
-            return Ok(prescriptions.Where(p => p.PatientId == patientId).Select(MapToDto));
+            return Ok(await _prescriptionBusiness.GetByPatientIdAsync(patientId));
         }
 
         [HttpPost]
@@ -55,64 +46,33 @@ namespace MediSphere.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var prescription = new PrescriptionModel
+            var result = await _prescriptionBusiness.CreateAsync(dto);
+            if (!result.Success)
             {
-                PatientId = dto.PatientId,
-                MedicationName = dto.MedicationName,
-                Dosage = dto.Dosage,
-                PaymentNeeded = dto.PaymentNeeded,
-                Notes = dto.Notes
-            };
+                return BadRequest(result.ErrorMessage);
+            }
 
-            var created = await _repository.CreateAsync(prescription);
-            _logger.LogInformation("Prescription {PrescriptionId} created via API", created.PrescriptionId);
-            return CreatedAtAction(nameof(GetById), new { id = created.PrescriptionId }, MapToDto(created));
+            _logger.LogInformation("Prescription {PrescriptionId} created via API", result.Data!.PrescriptionId);
+            return CreatedAtAction(nameof(GetById), new { id = result.Data.PrescriptionId }, result.Data);
         }
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult<PrescriptionDto>> Update(int id, [FromBody] CreatePrescriptionDto dto)
         {
-            try
+            var result = await _prescriptionBusiness.UpdateAsync(id, dto);
+            if (!result.Success)
             {
-                var existing = await _repository.GetByIdAsync(id);
-                existing.PatientId = dto.PatientId;
-                existing.MedicationName = dto.MedicationName;
-                existing.Dosage = dto.Dosage;
-                existing.PaymentNeeded = dto.PaymentNeeded;
-                existing.Notes = dto.Notes;
+                return result.ErrorMessage == "Prescription not found." ? NotFound() : BadRequest(result.ErrorMessage);
+            }
 
-                var updated = await _repository.UpdateAsync(existing);
-                return Ok(MapToDto(updated));
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            return Ok(result.Data);
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                var prescription = await _repository.GetByIdAsync(id);
-                await _repository.DeleteAsync(prescription);
-                return NoContent();
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            var result = await _prescriptionBusiness.DeleteAsync(id);
+            return result.Success ? NoContent() : NotFound();
         }
-
-        private static PrescriptionDto MapToDto(PrescriptionModel prescription) => new()
-        {
-            PrescriptionId = prescription.PrescriptionId,
-            PatientId = prescription.PatientId,
-            MedicationName = prescription.MedicationName,
-            Dosage = prescription.Dosage,
-            PaymentNeeded = prescription.PaymentNeeded,
-            Notes = prescription.Notes
-        };
     }
 }

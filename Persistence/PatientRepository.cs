@@ -1,9 +1,9 @@
 using MediSphere.DAL;
 using MediSphere.Models;
-using MediSphere.Repositories.Interfaces;
+using MediSphere.Persistence.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace MediSphere.Repositories
+namespace MediSphere.Persistence
 {
     public class PatientRepository : IRepository<PatientModel>
     {
@@ -17,9 +17,7 @@ namespace MediSphere.Repositories
         public async Task<PatientModel> CreateAsync(PatientModel entity)
         {
             await _dbcontext.Patients.AddAsync(entity);
-            
             await _dbcontext.SaveChangesAsync();
-
             return entity;
         }
 
@@ -33,8 +31,7 @@ namespace MediSphere.Repositories
             var patient = await _dbcontext.Patients.FindAsync(id);
             if (patient == null)
             {
-
-                throw new Exception("patient not found");
+                throw new KeyNotFoundException($"Patient {id} not found.");
             }
             return patient;
         }
@@ -42,9 +39,7 @@ namespace MediSphere.Repositories
         public async Task<PatientModel> UpdateAsync(PatientModel entity)
         {
             _dbcontext.Entry(entity).CurrentValues.SetValues(entity);
-
             await _dbcontext.SaveChangesAsync();
-
             return entity;
         }
 

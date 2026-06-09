@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MediSphere.Services;
 using Microsoft.AspNetCore.Authorization;
 
 namespace MediSphere.Pages.Administrator
@@ -43,10 +42,15 @@ namespace MediSphere.Pages.Administrator
                 return NotFound();
             }
 
-            // Manually lockout the user
             await _userManager.SetLockoutEndDateAsync(existingUser, DateTimeOffset.MaxValue);
 
-            //you could implement the sending of an email to the user, to tell them that their account has been locked out from the system here.
+            if (!string.IsNullOrEmpty(existingUser.Email))
+            {
+                await _emailSender.SendEmailAsync(
+                    existingUser.Email,
+                    "MediSphere account locked",
+                    "Your MediSphere account has been locked by an administrator. Contact your hospital administrator for assistance.");
+            }
 
             return RedirectToPage("/Administrator/Settings");
         }

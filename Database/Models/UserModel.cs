@@ -3,12 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MediSphere.Models
 {
-    /// <summary>
-    /// represents a user table with custom fields for use with asp.net core scaffolded identity.
-    /// </summary>
     public class UserModel : IdentityUser<int>
     {
-        public string FirstName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
         public string? MiddleName { get; set; }
         public string? LastName { get; set; }
         [DataType(DataType.Date)]

@@ -1,25 +1,23 @@
 using MediSphere.DAL;
 using MediSphere.Models;
-using MediSphere.Repositories.Interfaces;
+using MediSphere.Persistence.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace MediSphere.Repositories
+namespace MediSphere.Persistence
 {
     public class PrescriptionRepository : IRepository<PrescriptionModel>
     {
-        private ApplicationDBContext _dbcontext;
-        
+        private readonly ApplicationDBContext _dbcontext;
+
         public PrescriptionRepository(ApplicationDBContext dbContext)
         {
-                _dbcontext = dbContext;
+            _dbcontext = dbContext;
         }
 
         public async Task<PrescriptionModel> CreateAsync(PrescriptionModel entity)
         {
             await _dbcontext.Prescriptions.AddAsync(entity);
-           
             await _dbcontext.SaveChangesAsync();
-
             return entity;
         }
 
@@ -33,8 +31,7 @@ namespace MediSphere.Repositories
             var prescription = await _dbcontext.Prescriptions.FindAsync(id);
             if (prescription == null)
             {
-
-                throw new Exception("prescription not found");
+                throw new KeyNotFoundException($"Prescription {id} not found.");
             }
             return prescription;
         }
@@ -42,9 +39,7 @@ namespace MediSphere.Repositories
         public async Task<PrescriptionModel> UpdateAsync(PrescriptionModel entity)
         {
             _dbcontext.Entry(entity).CurrentValues.SetValues(entity);
-
             await _dbcontext.SaveChangesAsync();
-
             return entity;
         }
 

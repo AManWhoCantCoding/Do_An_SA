@@ -3,7 +3,7 @@
           He thong Quan ly Benh vien (Hospital Management System)
           (Truoc day: DocDocGo — da doi ten va thiet ke lai giao dien)
 ================================================================================
-Ngay cap nhat: 08/06/2026 12:51
+Ngay cap nhat: 09/06/2026 (kien truc 5 tang)
 
 ================================================================================
 PHAN 1: PHAN LOAI FRONTEND VA BACKEND
@@ -17,26 +17,54 @@ Cong nghe: HTML, Razor, CSS (siteTheme.css, site.css), JavaScript, jQuery, Boots
 Thu muc chinh: Pages/**/*.cshtml, wwwroot/css/, wwwroot/js/
 
 --- BACKEND ---
-Cong nghe: ASP.NET Core 6.0, EF Core, Identity, JWT, SQL Server
-Thu muc chinh: Api/, Dto/, DAL/, Models/, Repositories/, Services/, Middleware/, Program.cs
+Cong nghe: ASP.NET Core 6.0, EF Core, Identity, JWT, SQL Server, SMTP (System.Net.Mail)
+Thu muc chinh: Api/, Dto/, Business/, Services/, Persistence/, Database/, Middleware/, Program.cs
 
---- FILE THUA / KHONG SU DUNG ---
-Models/RolesModel.cs, UserRolesModel.cs (Compile Remove)
-IPatientRepository, IPrescriptionRepository, IReportRepository (Compile Remove)
-Pages/Account/Pages/** (Compile Remove)
-itext7 package (da go bo)
+--- DA DON DEP ---
+Go bo package SendGrid (khong dung — email qua SMTP)
+Xoa Compile Remove thua trong MediSphere.csproj (file khong ton tai)
+Xoa import NuGet.Packaging.Core sai trong AppointmentRepository
+Them trang ShowRecoveryCodes (2FA recovery codes)
 
 --- TEN WIDGET GIU NGUYEN (Sidebar) ---
 Dashboard, Patients, Add A Patient, Appointments, Prescriptions,
 Add Prescription, Reports, Report Types, Generate A Report, Administrator Settings
 
 ================================================================================
-PHAN 2: KIEN TRUC DU AN
+PHAN 2: KIEN TRUC DU AN (5 TANG - LAYERED ARCHITECTURE)
 ================================================================================
 
-N-Tier Layered + REST API
-Presentation (Razor + JS) -> API Controllers + DTOs -> PageModel/Services -> Repositories -> EF Core -> SQL Server
+Luong xu ly: Presentation -> Business -> Services -> Persistence -> Database
+
+(1) PRESENTATION LAYER
+    Pages/, wwwroot/, Api/Controllers/, Dto/, ViewModels/
+    - Razor UI, REST API, api-client.js (MediSphereApi)
+    - Controllers goi *Business; trang Reports/Dashboard goi *Business
+
+(2) BUSINESS LAYER — Business/
+    PatientBusiness, AppointmentBusiness, PrescriptionBusiness,
+    ReportBusiness, DashboardBusiness
+    - Kiem tra nghiep vu (validation, quy tac)
+    - Map DTO <-> Model, tra ve BusinessResult<T>
+
+(3) SERVICES LAYER — Services/
+    PatientService, AppointmentService, PrescriptionService,
+    ReportService, ReportTypeService, DashboardService,
+    NotificationService, EmailSender
+    - Dieu phoi thao tac CRUD qua Persistence
+    - Email: Identity (EmailSender) + thong bao (NotificationService)
+
+(4) PERSISTENCE LAYER — Persistence/
+    PatientRepository, AppointmentRepository, PrescriptionRepository,
+    ReportRepository, ReportTypeRepository
+    - Interfaces: IRepository<T>, IAppointmentRepository<T>
+
+(5) DATABASE LAYER — Database/, Migrations/
+    Database/Models/ (entities), Database/DAL/ (ApplicationDBContext)
+    SQL Server qua EF Core
+
 Bao mat: Cookie (web) + JWT (API), scheme JwtOrCookie
+DI: DependencyInjection/ServiceCollectionExtensions.cs -> AddMediSphereLayers()
 Vai tro: Administrator, Staff
 
 ================================================================================
@@ -44,16 +72,61 @@ PHAN 3: CAU TRUC DU AN
 ================================================================================
 
 MediSphere/
-|-- MediSphere.csproj, MediSphere.sln
-|-- Api/Controllers/, Dto/, DAL/, Models/, Repositories/, Services/, Middleware/
-|-- Pages/ (Account, Administrator, Appointments, Home, Patient, Prescriptions, Reports, Shared)
-|-- MediSphere.Tests/
-|-- wwwroot/css/siteTheme.css (theme tuy chinh), wwwroot/js/api-client.js (MediSphereApi)
+|-- MediSphere.csproj, MediSphere.sln, Program.cs, SmtpSettings.cs, AuthSchemes.cs
+|-- Presentation: Pages/, Api/Controllers/, Dto/, ViewModels/, wwwroot/
+|-- Business/            (*Business — validation, quy tac nghiep vu)
+|-- Services/            (*Service, EmailSender, NotificationService, DashboardService)
+|-- Persistence/         (*Repository — CRUD EF Core)
+|-- Database/
+|   |-- Models/          (Patient, Appointment, Prescription, Report, UserModel...)
+|   |-- DAL/             (ApplicationDBContext)
+|-- Migrations/          (EF Core schema)
+|-- DependencyInjection/ (ServiceCollectionExtensions.AddMediSphereLayers)
+|-- Middleware/          (RequestLoggingMiddleware)
+|-- MediSphere.Tests/    (xUnit — Persistence layer tests)
+|-- appsettings.json     (ConnectionStrings, JwtSettings, SmtpSettings)
 |-- Dockerfile, docker-compose.yml, docs/SA_REPORT.md
 |-- Database-Copy/DocDocGoDB.bak (ten file backup goc)
 
 ================================================================================
-PHAN 4: MA NGUON TUNG FILE (154 files)
+PHAN 3B: CAU HINH EMAIL (SMTP)
+================================================================================
+
+File: appsettings.json — section SmtpSettings
+
+  SmtpServer, SmtpPort, SmtpUsername, SmtpPassword (bat buoc)
+  FromEmail, FromDisplayName (tuy chon)
+
+Service: Services/EmailSender.cs (Identity), Services/NotificationService.cs (thong bao lich hen/bao cao)
+Dang ky DI: AddMediSphereLayers() trong DependencyInjection/ServiceCollectionExtensions.cs
+
+Luong email hoat dong:
+  - Xac nhan email (Register, RegisterConfirmation, ResendEmailConfirmation)
+  - Quen mat khau (ForgotPassword -> ResetPassword)
+  - Doi email (Account/Manage/Email)
+  - Thong bao admin: khoa/xoa tai khoan (Settings, LockoutUser, DeleteUser)
+  - Xac nhan lich hen (AppointmentBusiness -> NotificationService)
+  - Cap nhat trang thai bao cao (ReportBusiness -> NotificationService)
+
+Test local: https://ethereal.email/create — tao tai khoan SMTP mau, xem email trong inbox web Ethereal.
+
+================================================================================
+PHAN 3C: SERVICES MOI (Services Layer)
+================================================================================
+
+| Service | Chuc nang |
+|---------|-----------|
+| PatientService | CRUD benh nhan qua PatientRepository |
+| AppointmentService | CRUD lich hen |
+| PrescriptionService | CRUD don thuoc, loc theo PatientId |
+| ReportService | CRUD bao cao, danh dau da in |
+| ReportTypeService | Quan ly mau bao cao |
+| DashboardService | Tong hop so lieu Dashboard (patients, appointments, ...) |
+| NotificationService | Gui email thong bao (lich hen, bao cao, welcome staff) |
+| EmailSender | SMTP cho ASP.NET Identity |
+
+================================================================================
+PHAN 4: MA NGUON TUNG FILE (tham chieu — co the lech phien ban moi)
 ================================================================================
 --------------------------------------------------------------------------------
 FILE: Api\Controllers\AppointmentsController.cs

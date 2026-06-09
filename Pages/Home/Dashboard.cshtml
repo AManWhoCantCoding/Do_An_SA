@@ -8,7 +8,38 @@
 
 <div class="ms-page-header">
     <h1>Welcome to MediSphere</h1>
-    <p>Select one of the menu items to get started.</p>
+    <p>Hospital overview — select a module below or use the sidebar.</p>
+</div>
+
+<div class="ms-stat-grid" style="margin-bottom: 1.5rem;">
+    <div class="ms-stat-card">
+        <div class="ms-stat-icon teal"><i class="bi bi-people"></i></div>
+        <div>
+            <div class="ms-stat-label">Total</div>
+            <div class="ms-stat-title">@Model.Stats.PatientCount Patients</div>
+        </div>
+    </div>
+    <div class="ms-stat-card">
+        <div class="ms-stat-icon indigo"><i class="bi bi-calendar-check"></i></div>
+        <div>
+            <div class="ms-stat-label">Scheduled</div>
+            <div class="ms-stat-title">@Model.Stats.AppointmentCount Appointments</div>
+        </div>
+    </div>
+    <div class="ms-stat-card">
+        <div class="ms-stat-icon amber"><i class="bi bi-capsule-pill"></i></div>
+        <div>
+            <div class="ms-stat-label">Active</div>
+            <div class="ms-stat-title">@Model.Stats.PrescriptionCount Prescriptions</div>
+        </div>
+    </div>
+    <div class="ms-stat-card">
+        <div class="ms-stat-icon rose"><i class="bi bi-file-earmark-text"></i></div>
+        <div>
+            <div class="ms-stat-label">Records</div>
+            <div class="ms-stat-title">@Model.Stats.ReportCount Reports</div>
+        </div>
+    </div>
 </div>
 
 <div class="ms-stat-grid">

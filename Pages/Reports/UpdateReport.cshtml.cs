@@ -1,25 +1,21 @@
+using MediSphere.Business.Interfaces;
 using MediSphere.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MediSphere.Repositories.Interfaces;
 
 namespace MediSphere.Pages.Reports
 {
-
     [Authorize]
     public class UpdateReportModel : PageModel
     {
+        private readonly IReportBusiness _reportBusiness;
 
-        private readonly IRepository<ReportModel> _dbContext;
-        private readonly IRepository<PatientModel> _patientcontext;
+        public IEnumerable<PatientModel> Patients { get; set; } = Enumerable.Empty<PatientModel>();
 
-        public IEnumerable<PatientModel> Patients { get; set; }
-
-        public UpdateReportModel(IRepository<ReportModel> dbContext, IRepository<PatientModel> patientDbContext)
+        public UpdateReportModel(IReportBusiness reportBusiness)
         {
-            _dbContext = dbContext;
-            _patientcontext = patientDbContext;
+            _reportBusiness = reportBusiness;
         }
 
         [BindProperty]
@@ -27,13 +23,27 @@ namespace MediSphere.Pages.Reports
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Patients = await _patientcontext.GetAsync();
-            ExistingReportModel = await _dbContext.GetByIdAsync(id);
+            Patients = await _reportBusiness.GetPatientsForReportsAsync();
+            var report = await _reportBusiness.GetByIdAsync(id);
 
-            if (ExistingReportModel == null)
+            if (report == null)
             {
                 return NotFound();
             }
+
+            ExistingReportModel = new ReportModel
+            {
+                ReportId = report.ReportId,
+                PatientId = report.PatientId,
+                ReportDescription = report.ReportDescription,
+                InitialStaffName = report.InitialStaffName,
+                Status = report.Status,
+                CreatedAt = report.CreatedAt,
+                LastUpdated = report.LastUpdated,
+                LastUpdatedBy = report.LastUpdatedBy,
+                IsReportPrinted = report.IsReportPrinted,
+                ReportTypeId = report.ReportTypeId
+            };
 
             return Page();
         }
@@ -42,30 +52,17 @@ namespace MediSphere.Pages.Reports
         {
             if (!ModelState.IsValid)
             {
+                Patients = await _reportBusiness.GetPatientsForReportsAsync();
                 return Page();
             }
 
-            var existingReport = await _dbContext.GetByIdAsync(ExistingReportModel.ReportId);
-            if (existingReport == null)
+            var result = await _reportBusiness.UpdateReportAsync(ExistingReportModel, User.Identity?.Name);
+            if (!result.Success)
             {
-                return NotFound();
+                return result.ErrorMessage == "Report not found." ? NotFound() : Page();
             }
 
-            string currentUser = User.Identity.Name;
-
-            existingReport.ReportDescription = ExistingReportModel.ReportDescription;
-            existingReport.PatientId = ExistingReportModel.PatientId;
-            existingReport.InitialStaffName = ExistingReportModel.InitialStaffName;
-            existingReport.LastUpdated = DateTime.Now;
-            existingReport.LastUpdatedBy = currentUser;
-            existingReport.Status = ExistingReportModel.Status;
-
-
-            await _dbContext.UpdateAsync(existingReport);
-
             return RedirectToPage("/Reports/Index");
-
         }
     }
-
-    }
+}

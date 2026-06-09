@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MediSphere.Services;
 using Microsoft.AspNetCore.Authorization;
 
 namespace MediSphere.Pages.Administrator
@@ -44,8 +43,16 @@ namespace MediSphere.Pages.Administrator
                 return NotFound();
             }
 
+            var userEmail = existingUser.Email;
             var result = await _userManager.DeleteAsync(existingUser);
-            //you could implement the sending of an email to the user, to tell them that their account has been removed from the system here.
+
+            if (result.Succeeded && !string.IsNullOrEmpty(userEmail))
+            {
+                await _emailSender.SendEmailAsync(
+                    userEmail,
+                    "MediSphere account removed",
+                    "Your MediSphere account has been removed from the system by an administrator.");
+            }
 
             if (!result.Succeeded)
             {

@@ -1,6 +1,5 @@
+using MediSphere.Business.Interfaces;
 using MediSphere.Dto;
-using MediSphere.Models;
-using MediSphere.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,109 +10,63 @@ namespace MediSphere.Api.Controllers
     [Authorize(AuthenticationSchemes = AuthSchemes.JwtOrCookie)]
     public class AppointmentsController : ControllerBase
     {
-        private readonly IAppointmentRepository<AppointmentModel> _repository;
+        private readonly IAppointmentBusiness _appointmentBusiness;
         private readonly ILogger<AppointmentsController> _logger;
 
-        public AppointmentsController(IAppointmentRepository<AppointmentModel> repository, ILogger<AppointmentsController> logger)
+        public AppointmentsController(IAppointmentBusiness appointmentBusiness, ILogger<AppointmentsController> logger)
         {
-            _repository = repository;
+            _appointmentBusiness = appointmentBusiness;
             _logger = logger;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AppointmentDto>>> GetAll()
         {
-            var appointments = await _repository.GetAsync();
-            return Ok(appointments.Select(MapToDto));
+            return Ok(await _appointmentBusiness.GetAllAsync());
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<AppointmentDto>> GetById(int id)
         {
-            try
-            {
-                return Ok(MapToDto(await _repository.GetByIdAsync(id)));
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            var appointment = await _appointmentBusiness.GetByIdAsync(id);
+            return appointment == null ? NotFound() : Ok(appointment);
         }
 
         [HttpPost]
         public async Task<ActionResult<AppointmentDto>> Create([FromBody] CreateAppointmentDto dto)
         {
-            if (!ModelState.IsValid || dto.StartTime >= dto.EndTime)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Start time must be before end time.");
+                return BadRequest(ModelState);
             }
 
-            var appointment = new AppointmentModel
+            var result = await _appointmentBusiness.CreateAsync(dto);
+            if (!result.Success)
             {
-                PatientId = dto.PatientId,
-                Topic = dto.Topic,
-                StartTime = dto.StartTime,
-                EndTime = dto.EndTime,
-                Status = dto.Status,
-                Notes = dto.Notes
-            };
+                return BadRequest(result.ErrorMessage);
+            }
 
-            var created = await _repository.CreateAsync(appointment);
-            _logger.LogInformation("Appointment {AppointmentId} created via API", created.AppointmentId);
-            return CreatedAtAction(nameof(GetById), new { id = created.AppointmentId }, MapToDto(created));
+            _logger.LogInformation("Appointment {AppointmentId} created via API", result.Data!.AppointmentId);
+            return CreatedAtAction(nameof(GetById), new { id = result.Data.AppointmentId }, result.Data);
         }
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult<AppointmentDto>> Update(int id, [FromBody] CreateAppointmentDto dto)
         {
-            if (dto.StartTime >= dto.EndTime)
+            var result = await _appointmentBusiness.UpdateAsync(id, dto);
+            if (!result.Success)
             {
-                return BadRequest("Start time must be before end time.");
+                return result.ErrorMessage == "Appointment not found." ? NotFound() : BadRequest(result.ErrorMessage);
             }
 
-            try
-            {
-                var existing = await _repository.GetByIdAsync(id);
-                existing.PatientId = dto.PatientId;
-                existing.Topic = dto.Topic;
-                existing.StartTime = dto.StartTime;
-                existing.EndTime = dto.EndTime;
-                existing.Status = dto.Status;
-                existing.Notes = dto.Notes;
-
-                var updated = await _repository.UpdateAsync(existing);
-                return Ok(MapToDto(updated));
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            return Ok(result.Data);
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                var appointment = await _repository.GetByIdAsync(id);
-                await _repository.DeleteAsync(appointment);
-                return NoContent();
-            }
-            catch (Exception)
-            {
-                return NotFound();
-            }
+            var result = await _appointmentBusiness.DeleteAsync(id);
+            return result.Success ? NoContent() : NotFound();
         }
-
-        private static AppointmentDto MapToDto(AppointmentModel appointment) => new()
-        {
-            AppointmentId = appointment.AppointmentId,
-            PatientId = appointment.PatientId,
-            Topic = appointment.Topic,
-            StartTime = appointment.StartTime,
-            EndTime = appointment.EndTime,
-            Status = appointment.Status,
-            Notes = appointment.Notes
-        };
     }
 }

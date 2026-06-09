@@ -16,7 +16,6 @@ namespace MediSphere.Models
         public bool PaymentNeeded { get; set; }
         public string? Notes { get; set; }
 
-        public PatientModel Patient { get; set; }
-
+        public PatientModel Patient { get; set; } = null!;
     }
 }

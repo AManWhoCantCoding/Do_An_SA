@@ -46,6 +46,14 @@ namespace MediSphere.Pages.Administrator
             {
                 await _userManager.SetLockoutEnabledAsync(user, true);
                 await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+
+                if (!string.IsNullOrEmpty(user.Email))
+                {
+                    await _emailSender.SendEmailAsync(
+                        user.Email,
+                        "MediSphere account locked",
+                        "Your MediSphere account has been locked by an administrator. Contact your hospital administrator for assistance.");
+                }
             }
 
             return RedirectToPage();
