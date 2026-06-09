@@ -22,6 +22,9 @@ namespace MediSphere.Pages.Reports
         [BindProperty]
         public ReportModel NewReportModel { get; set; } = new();
 
+        [BindProperty]
+        public int? SelectedTemplateTypeId { get; set; }
+
         public ReportTypeModel? SelectedReportType { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int reportId)
@@ -34,7 +37,7 @@ namespace MediSphere.Pages.Reports
                 SelectedReportType = ReportTypes.FirstOrDefault(rt => rt.ReportTypeId == reportId);
                 if (SelectedReportType != null)
                 {
-                    NewReportModel.ReportId = SelectedReportType.ReportTypeId;
+                    SelectedTemplateTypeId = SelectedReportType.ReportTypeId;
                     NewReportModel.ReportDescription = SelectedReportType.TemplateType;
                 }
             }
@@ -55,7 +58,8 @@ namespace MediSphere.Pages.Reports
                 ReportDescription = NewReportModel.ReportDescription,
                 PatientId = NewReportModel.PatientId,
                 InitialStaffName = NewReportModel.InitialStaffName,
-                Status = NewReportModel.Status
+                Status = NewReportModel.Status,
+                ReportTypeId = null
             };
 
             var result = await _reportBusiness.CreateReportAsync(report);

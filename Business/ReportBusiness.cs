@@ -57,6 +57,7 @@ namespace MediSphere.Business
             report.CreatedAt = DateTime.Now;
             report.LastUpdated = DateTime.Now;
             report.Status ??= "Draft";
+            report.ReportTypeId = null;
 
             var created = await _reportService.CreateAsync(report);
             return BusinessResult<ReportModel>.Ok(created);
