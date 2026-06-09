@@ -59,7 +59,7 @@ namespace MediSphere.Pages.Reports
                 PatientId = NewReportModel.PatientId,
                 InitialStaffName = NewReportModel.InitialStaffName,
                 Status = NewReportModel.Status,
-                ReportTypeId = null
+                ReportTypeId = NewReportModel.ReportTypeId
             };
 
             var result = await _reportBusiness.CreateReportAsync(report);

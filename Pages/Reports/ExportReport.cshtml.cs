@@ -61,30 +61,34 @@ namespace MediSphere.Pages.Reports
                 return Page();
             }
 
-            using var workbook = new XLWorkbook();
-            var worksheet = workbook.Worksheets.Add("Report");
+            using (var workbook = new XLWorkbook())
+            {
+                var worksheet = workbook.Worksheets.Add("Report");
 
-            worksheet.Cell("A1").Value = "Report ID";
-            worksheet.Cell("B1").Value = "Patient ID";
-            worksheet.Cell("C1").Value = "Created On";
-            worksheet.Cell("D1").Value = "Reporting Status";
-            worksheet.Cell("E1").Value = "By Staff Member";
-            worksheet.Cell("F1").Value = "Report Type";
+                worksheet.Cell("A1").Value = "Report ID";
+                worksheet.Cell("B1").Value = "Patient ID";
+                worksheet.Cell("C1").Value = "Created On";
+                worksheet.Cell("D1").Value = "Reporting Status";
+                worksheet.Cell("E1").Value = "By Staff Member";
+                worksheet.Cell("F1").Value = "Report Type";
 
-            worksheet.Cell("A2").Value = reportDto.ReportId;
-            worksheet.Cell("B2").Value = reportDto.PatientId;
-            worksheet.Cell("C2").Value = reportDto.CreatedAt;
-            worksheet.Cell("D2").Value = reportDto.Status;
-            worksheet.Cell("E2").Value = reportDto.InitialStaffName;
-            worksheet.Cell("F2").Value = reportDto.ReportTypeId?.ToString() ?? "N/A";
+                worksheet.Cell("A2").Value = reportDto.ReportId;
+                worksheet.Cell("B2").Value = reportDto.PatientId;
+                worksheet.Cell("C2").Value = reportDto.CreatedAt;
+                worksheet.Cell("D2").Value = reportDto.Status;
+                worksheet.Cell("E2").Value = reportDto.InitialStaffName;
+                worksheet.Cell("F2").Value = reportDto.ReportTypeId?.ToString() ?? "N/A";
 
-            var stream = new MemoryStream();
-            workbook.SaveAs(stream);
-            stream.Position = 0;
+                using (var stream = new MemoryStream())
+                {
+                    workbook.SaveAs(stream);
+                    var content = stream.ToArray();
 
-            await _reportBusiness.MarkAsPrintedAsync(Id);
+                    await _reportBusiness.MarkAsPrintedAsync(Id);
 
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fileName}.xlsx");
+                    return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"{fileName}.xlsx");
+                }
+            }
         }
     }
 }
