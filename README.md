@@ -3,7 +3,7 @@
 
 <br />
 <div align="center">
-  <img src="wwwroot/resources/logo-two.png" alt="MediSphere Logo">
+  <img src="wwwroot/resources/logo-two.svg" alt="MediSphere Logo">
 </div>
 
 MediSphere is a Hospital Management System — a modern web application for hospital administration, patient care workflows, and staff management. Previously developed as **DocDocGo**, the project has been rebranded and fully redesigned with a clean, professional UI.
@@ -16,6 +16,7 @@ MediSphere is a Hospital Management System — a modern web application for hosp
     <li><a href="#introduction">Introduction</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#ui-design">UI Design</a></li>
+    <li><a href="#logo-images">Logo Images</a></li>
     <li><a href="#software-architecture">Software Architecture</a></li>
     <li><a href="#technologies-used">Tech Stack</a></li>
     <li><a href="#email-smtp">Email (SMTP)</a></li>
@@ -89,6 +90,32 @@ The interface was rebuilt from scratch (replacing the Bootswatch *Morph* neumorp
 | Auth | Centered card with tab navigation |
 
 **Widget names preserved:** Patients, Add A Patient, Appointments, Prescriptions, Add Prescription, Reports, Report Types, Generate A Report, Administrator Settings, Dashboard.
+
+### Recent UI updates (Jun 2026)
+
+- Status dropdowns use **1-based** sequential numbering (e.g. `1 - Created`, `1 - Scheduled`) instead of 100-based values.
+- Removed **(API)** labels from modal titles and submit buttons (the UI still calls the REST API via `api-client.js`).
+- Fixed appointment **date/time picker** controls: Bootstrap 5 compatibility for increment/decrement buttons, correct script load order, and modal z-index styling.
+
+## Logo Images
+
+Place branding assets in `wwwroot/resources/`:
+
+| File | Purpose | Format |
+|---|---|---|
+| `logo-two.svg` | Sidebar and public pages | SVG (recommended) or PNG |
+| `main-logo.svg` | Browser tab favicon | SVG or ICO/PNG (32×32) |
+| `hero-placeholder.svg` | Landing page hero (optional) | SVG, JPG, or PNG |
+
+**To replace logos:**
+
+1. Copy your image into `wwwroot/resources/` (keep the same filename, or rename and update references).
+2. **Sidebar:** `Pages/Shared/_DashboardLayout.cshtml` — `src="~/resources/logo-two.svg"`
+3. **Favicon:** `_DashboardLayout.cshtml` and `Pages/Shared/_Layout.cshtml` — `href="~/resources/main-logo.svg"`
+4. **Public layout:** `Pages/Shared/_Layout.cshtml` — `logo-two.svg`
+5. Hard-refresh the browser (Ctrl+F5) after replacing files.
+
+If you use PNG instead of SVG, update the file extension in the `.cshtml` references above.
 
 ## Software Architecture
 
@@ -260,7 +287,9 @@ Password: Password123-_
 
 ## SA Requirements Evaluation
 
-Evaluation against the Software Architecture (SA) course rubric in [docs/SA_REPORT.md](docs/SA_REPORT.md). *(Note: `SA requirements.txt` is not in the repository; criteria below follow the SA report and standard SA assignment structure.)*
+Full evaluation (Vietnamese): [docs/SA_EVALUATION.md](docs/SA_EVALUATION.md) — rubric from `SA requirements.docx` at repo root. **Estimated score: ~97/110** (updated 09/06/2026).
+
+Architecture report: [docs/SA_REPORT.md](docs/SA_REPORT.md).
 
 | Category | Status | Notes |
 |---|---|---|

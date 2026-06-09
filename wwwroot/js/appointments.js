@@ -1,8 +1,23 @@
 $(document).ready(function () {
     let patientsCache = [];
 
-    $('#SelectedAppointment_StartTime, #NewAppointment_StartTime').datetimepicker({ format: 'YYYY-MM-DD HH:mm' });
-    $('#SelectedAppointment_EndTime, #NewAppointment_EndTime').datetimepicker({ format: 'YYYY-MM-DD HH:mm' });
+    const dateTimePickerOptions = {
+        format: 'YYYY-MM-DD HH:mm',
+        widgetParent: 'body',
+        icons: {
+            time: 'bi bi-clock',
+            date: 'bi bi-calendar',
+            up: 'bi bi-chevron-up',
+            down: 'bi bi-chevron-down',
+            previous: 'bi bi-chevron-left',
+            next: 'bi bi-chevron-right',
+            today: 'bi bi-calendar-check',
+            clear: 'bi bi-trash',
+            close: 'bi bi-x-lg'
+        }
+    };
+    $('#SelectedAppointment_StartTime, #NewAppointment_StartTime').datetimepicker(dateTimePickerOptions);
+    $('#SelectedAppointment_EndTime, #NewAppointment_EndTime').datetimepicker(dateTimePickerOptions);
 
     loadPatientsIntoSelects().then(function () {
         initCalendar();
