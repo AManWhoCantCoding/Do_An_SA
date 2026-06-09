@@ -225,7 +225,9 @@ dotnet build MediSphere.sln
 
 Connect to `(localdb)\MSSQLLocalDB` or your SQL Server instance in SSMS.
 
-Restore `Database-Copy/DocDocGoDB.bak` (original backup filename). On restore, set the database name to **MediSphereDB**, or keep **DocDocGoDB** and update `HospitalManagementSQLConnection` in `appsettings.json`.
+Restore `Database-Copy/
+
+.bak` (original backup filename). On restore, set the database name to **MediSphereDB**, or keep **MediSphereDB** and update `HospitalManagementSQLConnection` in `appsettings.json`.
 
 ![SSMS Starting Screenshot](Instruction-images/startingConnection.png)
 ![SSMS Context Menu Screenshot](Instruction-images/restoreDatabase.png)

@@ -158,7 +158,7 @@ MediSphere/
 |-- MediSphere.Tests/    (xUnit — Persistence layer tests)
 |-- appsettings.json     (ConnectionStrings, JwtSettings, SmtpSettings)
 |-- Dockerfile, docker-compose.yml, docs/SA_REPORT.md
-|-- Database-Copy/DocDocGoDB.bak (ten file backup goc)
+|-- Database-Copy/MediSphereDB.bak (ten file backup goc)
 
 ================================================================================
 PHAN 3B: CAU HINH EMAIL (SMTP)
@@ -8017,7 +8017,7 @@ dotnet build MediSphere.sln
 
 Connect to `(localdb)\MSSQLLocalDB` or your SQL Server instance in SSMS.
 
-Restore `Database-Copy/DocDocGoDB.bak` (original backup filename). On restore, set the database name to **MediSphereDB**, or keep **DocDocGoDB** and update `HospitalManagementSQLConnection` in `appsettings.json`.
+Restore `Database-Copy/MediSphereDB.bak` (original backup filename). On restore, set the database name to **MediSphereDB**, or keep **MediSphereDB** and update `HospitalManagementSQLConnection` in `appsettings.json`.
 
 ![SSMS Starting Screenshot](Instruction-images/startingConnection.png)
 ![SSMS Context Menu Screenshot](Instruction-images/restoreDatabase.png)
